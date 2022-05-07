@@ -3,6 +3,7 @@ package com.example.group13zoosearch;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.List;
 
 public class AnimalList {
     PriorityQueue<AnimalNode> selected_animals;
