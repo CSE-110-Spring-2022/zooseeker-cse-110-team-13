@@ -1,15 +1,27 @@
 package com.example.group13zoosearch;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.List;
 
 public class AnimalList {
-    public void addNode(List<AnimalNode> list, AnimalNode an){
-        list.add(an);
+    PriorityQueue<AnimalNode> selected_animals;
+    PriorityQueue<AnimalNode> all_animals;
+    PriorityQueue<AnimalNode> favorited_animals;
+    ArrayList<String> exhibits = new ArrayList<>();
+    static ArrayList<String> selected_exhibits = new ArrayList<>();
+
+    public AnimalList() {
+        selected_exhibits.add("xijiyang");    //kbell: what is this for?
+    }
+
+    public void addToSelectAnimal(AnimalNode an){
+        //TODO: to be implemented
     }
 
     public void removeNode(List<AnimalNode> list, AnimalNode an){
-        list.remove(an);
+        list.remove(an); //TODO: probably needs to be edited to work with priority queue
     }
 
     public void favoriteSelected(AnimalNode an){
