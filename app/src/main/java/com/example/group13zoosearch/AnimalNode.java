@@ -5,6 +5,8 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.jgrapht.Graph;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,14 +22,11 @@ public class AnimalNode {
     public String kind;
     public String name;
     public List<String> tags;
-    //edge info
-    public String street;
-    public String edgeId;
 
     public boolean visited;
     public boolean favorited;
-    public int distance_from_location;
-    public int ETA_time; //time in minutes
+    public double distance_from_location;
+    public double ETA_time; //time in minutes
 
 
     AnimalNode(String id, String kind, String name, List<String> tags) {
@@ -67,6 +66,11 @@ public class AnimalNode {
             e.printStackTrace();
             return Collections.emptyList();
         }
+    }
+
+    //Updates the distance of current node given a starting node
+    public void updateDistance(String start, Graph<String, IdentifiedWeightedEdge> graph){
+        this.distance_from_location = Directions.computeDistance(start, this.id, graph);
     }
 
 }

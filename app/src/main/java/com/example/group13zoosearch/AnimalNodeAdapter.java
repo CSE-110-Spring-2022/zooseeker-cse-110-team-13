@@ -64,18 +64,18 @@ public class AnimalNodeAdapter extends RecyclerView.Adapter<AnimalNodeAdapter.Vi
 
         //Setters
         public void setDistanceText(TextView distanceText) {
-            String dist = Integer.toString(animalNode.distance_from_location);
+            String dist = Double.toString(animalNode.distance_from_location);
             this.distanceText.setText(dist);
         }
 
         public void setETAText(TextView ETAText) {
-            String eta = Integer.toString(animalNode.ETA_time);
+            String eta = Double.toString(animalNode.ETA_time);
             this.ETAText.setText(eta);
         }
 
         public void setAnimalNode(AnimalNode animalNode) {
-            String dist = Integer.toString(animalNode.distance_from_location);
-            String eta = Integer.toString(animalNode.ETA_time);
+            String dist = Double.toString(animalNode.distance_from_location);
+            String eta = Double.toString(animalNode.ETA_time);
 
             this.animalNode = animalNode;
             this.nameText.setText(animalNode.name);
