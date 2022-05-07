@@ -10,6 +10,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
@@ -53,5 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
         //return true;
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void directionsLaunched(View view) {
+        Intent DirectionsIntent = new Intent(this, DirectionsActivity.class);
+        startActivity(DirectionsIntent);
+    }
+
+    public void searchLaunched(View view) {
+        Intent searchIntent = new Intent(this, SearchActivity.class);
+        startActivity(searchIntent);
     }
 }
