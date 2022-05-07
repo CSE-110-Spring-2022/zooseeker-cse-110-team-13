@@ -12,24 +12,28 @@ public class AnimalList {
     static ArrayList<String> selected_exhibits = new ArrayList<>();
 
     public AnimalList() {
-        selected_exhibits.add("xijiyang");
+        selected_exhibits.add("xijiyang");    //kbell: what is this for?
     }
 
     public void addToSelectAnimal(Animal an){
         //TODO: to be implemented
     }
 
-    public void removeFromSelected(Animal an){
-        //TODO: to be implemented
+    public void removeNode(List<AnimalNode> list, AnimalNode an){
+        list.remove(an); //TODO: probably needs to be edited to work with priority queue
     }
 
-    public void favoriteAnimal(Animal an){
-        //TODO: to be implemented
+    public void favoriteSelected(AnimalNode an){
+        if (an.favorited == false){
+            an.favorited = true;
+        } else {
+            an.favorited = false;
+        }
     }
 
-    public PriorityQueue<Animal> search(String str){
+    public PriorityQueue<AnimalNode> search(String str){
         //TODO: to be implemented
-        return new PriorityQueue<Animal>();
+        return new PriorityQueue<AnimalNode>();
     }
 
 }

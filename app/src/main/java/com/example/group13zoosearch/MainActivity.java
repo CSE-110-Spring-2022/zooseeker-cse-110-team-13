@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,4 +48,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+  //leaving this in here because we will need a directions launch eventually
+    public void directionsLaunched(View view) {
+        Intent DirectionsIntent = new Intent(this, DirectionsActivity.class);
+        startActivity(DirectionsIntent);
+    }
 }
