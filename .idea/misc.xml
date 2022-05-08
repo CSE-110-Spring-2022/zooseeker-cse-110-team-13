@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Firem/Desktop/zooseeker-cse-110-team-13/app/src/main/res/layout/activity_main.xml" value="0.21195652173913043" />
+        <entry key="..\:/Users/Firem/Desktop/zooseeker-cse-110-team-13/app/src/main/res/layout/activity_search.xml" value="0.21195652173913043" />
+        <entry key="..\:/Users/Firem/Desktop/zooseeker-cse-110-team-13/app/src/main/res/layout/animal_node_item.xml" value="0.21195652173913043" />
+        <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_directions.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_main.xml" value="0.22916666666666666" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_search.xml" value="0.2640625" />
+
         <entry key="..\:/Users/User/AndroidStudioProjects/zooseeker-cse-110-team-13/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.35" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.35" />

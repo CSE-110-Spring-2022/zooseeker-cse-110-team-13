@@ -13,6 +13,9 @@
             android:name=".ViewExhibitsActivity"
             android:exported="false" />
         <activity
+            android:name=".DirectionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SearchActivity"
             android:exported="false" />
         <activity
