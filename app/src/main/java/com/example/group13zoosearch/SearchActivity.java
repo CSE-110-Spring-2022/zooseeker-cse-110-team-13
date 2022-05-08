@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -35,6 +36,22 @@ public class SearchActivity extends AppCompatActivity {
 
         buildRecyclerView();
 
+//        final Button addButton = findViewById(R.id.add_button);
+        TextView textView = (TextView) findViewById(R.id.exhibit);
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                String selected_exhibit = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.exhibit)).getText().toString();
+                if(!AnimalList.selected_exhibits.contains(selected_exhibit))
+                    AnimalList.selected_exhibits.add(selected_exhibit);
+
+                Toast.makeText(getApplicationContext(), selected_exhibit + " added!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) { }
+        }));
     }
 
     @Override
@@ -93,7 +110,6 @@ public class SearchActivity extends AppCompatActivity {
 
         for (Map.Entry<String,ZooData.VertexInfo> entry : zooitem.entrySet())
             animalList.exhibits.add(entry.getValue().name);
-
 
         // initializing our adapter class.
         searchAdapter = new SearchAdapter(animalList.exhibits, SearchActivity.this);
