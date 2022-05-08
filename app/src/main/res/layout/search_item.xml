@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <TextView
         android:id="@+id/add_button"
         android:layout_width="50dp"
         android:layout_height="52dp"

@@ -12,7 +12,6 @@ public class AnimalList {
     static ArrayList<String> selected_exhibits = new ArrayList<>();
 
     public AnimalList() {
-        selected_exhibits.add("xijiyang");
     }
 
     public void addToSelectAnimal(Animal an){
