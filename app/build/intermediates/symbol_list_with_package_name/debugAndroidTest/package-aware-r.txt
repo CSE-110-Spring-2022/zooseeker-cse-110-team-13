@@ -1,3 +1,0 @@
-com.example.group13zoosearch.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
