@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Group13ZooSearch">
         <activity
-            android:name=".ViewExhibitsActivity"
-            android:exported="false" />
-        <activity
             android:name=".DirectionsActivity"
             android:exported="false" />
         <activity
