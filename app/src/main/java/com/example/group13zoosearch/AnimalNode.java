@@ -68,6 +68,11 @@ public class AnimalNode {
         }
     }
 
+    //We get the id value of the node
+    public String getID()
+    {
+        return id;
+    }
     //Updates the distance of current node given a starting node
     public void updateDistance(String start, Graph<String, IdentifiedWeightedEdge> graph){
         this.distance_from_location = Directions.computeDistance(start, this.id, graph);

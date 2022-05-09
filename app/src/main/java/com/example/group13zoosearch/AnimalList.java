@@ -18,8 +18,12 @@ public class AnimalList {
 
     public void addToSelectAnimal(AnimalNode an){
         //TODO: to be implemented
+        selected_animals.add(an);
     }
-
+    public AnimalNode getFirstValue()
+    {
+        return selected_animals.peek();
+    }
     public void removeNode(List<AnimalNode> list, AnimalNode an){
         list.remove(an); //TODO: probably needs to be edited to work with priority queue
     }
