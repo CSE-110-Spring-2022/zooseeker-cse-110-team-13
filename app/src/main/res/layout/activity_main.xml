@@ -20,13 +20,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976" />
 
-    <ListView
-        android:id="@+id/exhibit_list"
-        android:layout_width="409dp"
-        android:layout_height="619dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+    <Button
+        android:id="@+id/view_exhibits_button"
+        android:layout_width="296dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginEnd="62dp"
+        android:layout_marginBottom="517dp"
+        android:onClick="OnViewExhibitsClicked"
+        android:text="View exhibits list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -46,5 +48,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.909" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="296dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginEnd="58dp"
+        android:layout_marginBottom="408dp"
+        android:onClick="OnDirectionClicked"
+        android:text="DIRECTION"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_exhibits_button" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

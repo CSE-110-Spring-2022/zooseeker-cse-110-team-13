@@ -17,11 +17,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private ArrayList<String> animalArrayList;
     private Context context;
 
-    // creating a constructor for our variables.
+//     creating a constructor for our variables.
     public SearchAdapter(ArrayList<String> animalArrayList, Context context) {
         this.animalArrayList = animalArrayList;
         this.context = context;
     }
+
+//    public SearchAdapter(ArrayList<String> animalArrayList) {
+//        this.animalArrayList = animalArrayList;
+//    }
 
     // method for filtering our recyclerview items.
     public void filterList(ArrayList<String> filteredList) {
@@ -60,11 +64,25 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         // creating variables for our views.
         private TextView animal;
+        private final View addButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // initializing our views with their ids.
             animal = itemView.findViewById(R.id.exhibit);
+            addButton = itemView.findViewById(R.id.add_button);
+
+//            addButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    addItem(animal.getText().toString());
+//                }
+//            });
         }
+
+//        public void addItem(String item){
+//            AnimalList.selected_exhibits.add(item);
+//            notifyItemInserted(AnimalList.selected_exhibits.size()-1);
+//        }
     }
 }
