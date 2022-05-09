@@ -13,7 +13,7 @@ public class AnimalList {
     static ArrayList<String> selected_exhibits = new ArrayList<>();
 
     public AnimalList() {
-        selected_exhibits.add("xijiyang");    //kbell: what is this for?
+        selected_exhibits.add("Test");    //kbell: what is this for?
     }
 
     public void addToSelectAnimal(AnimalNode an){
