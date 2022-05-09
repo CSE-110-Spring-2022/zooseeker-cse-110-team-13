@@ -17,11 +17,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private ArrayList<String> animalArrayList;
     private Context context;
 
-    // creating a constructor for our variables.
+//     creating a constructor for our variables.
     public SearchAdapter(ArrayList<String> animalArrayList, Context context) {
         this.animalArrayList = animalArrayList;
         this.context = context;
     }
+
+//    public SearchAdapter(ArrayList<String> animalArrayList) {
+//        this.animalArrayList = animalArrayList;
+//    }
 
     // method for filtering our recyclerview items.
     public void filterList(ArrayList<String> filteredList) {
