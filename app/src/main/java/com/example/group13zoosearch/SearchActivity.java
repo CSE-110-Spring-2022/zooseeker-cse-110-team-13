@@ -1,7 +1,9 @@
 package com.example.group13zoosearch;
 
-
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,10 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class SearchActivity extends AppCompatActivity {
+
     public RecyclerView recyclerView;
     private SearchAdapter searchAdapter;
 //    public AnimalList animalList = new AnimalList();
