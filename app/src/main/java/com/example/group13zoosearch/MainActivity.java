@@ -20,10 +20,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         loadProfile();
 
     }
-
 
     public void OnSearchClicked(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void OnViewExhibitsClicked(View view) {
         Intent intent = new Intent(this, ViewExhibitsActivity.class);
+        startActivity(intent);
+    }
+
+    public void OnDirectionClicked(View view) {
+        Intent intent = new Intent(this, DirectionsActivity.class);
         startActivity(intent);
     }
 
@@ -67,4 +72,6 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 //        editor.commit();
     }
+
+
 }

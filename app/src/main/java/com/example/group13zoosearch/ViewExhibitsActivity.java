@@ -26,6 +26,8 @@ public class ViewExhibitsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_exhibits);
 
+        TextView textView = (TextView)findViewById(R.id.num_of_exhibits);
+        textView.setText(AnimalList.selected_exhibits.size() + " exhibits have been selected!");
 
         recyclerView = findViewById(R.id.recycler_exhibit_list);
         LinearLayoutManager manager = new LinearLayoutManager(this);
