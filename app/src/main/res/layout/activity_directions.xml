@@ -10,7 +10,7 @@
     tools:context=".DirectionsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/animal_items"
+        android:id="@+id/direction_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="0dp"

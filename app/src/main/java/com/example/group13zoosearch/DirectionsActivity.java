@@ -11,58 +11,114 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class DirectionsActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
+    private String currentLocation;
+    private List<DirectionStepItem> directions;
+    private PriorityQueue<AnimalNode> selectedAnimals;
+    private List<AnimalNode> animalNodes;
+    private Map<String, EdgeNameItem> edgeNodes;
+    private Graph<String, IdentifiedWeightedEdge> ZooGraphConstruct;
+    DirectionStepAdapter directionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
 
-        AnimalNodeAdapter animalAdapter = new AnimalNodeAdapter();
-        animalAdapter.setHasStableIds(true);
+        directionAdapter = new DirectionStepAdapter();
+        directionAdapter.setHasStableIds(true);
 
-        recyclerView = findViewById(R.id.animal_items);
+        //recycler view
+        recyclerView = findViewById(R.id.direction_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(animalAdapter);
+        recyclerView.setAdapter(directionAdapter);
 
-//========================need to add proper tests to this but for now this is my testing ====================================================
-        //create AnimalNode list (this will be done somewhere else eventually)
-        List<AnimalNode> animalNodes = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
-        Log.d("Animal List", animalNodes.toString());
+        //CREATING LISTS:
+        //create AnimalNode list
+        animalNodes = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
+        //Log.d("Animal List", animalNodes.toString());
 
-        //now can create a list of what the edges are called (this will be done somewhere else eventually)
-        Map<String, EdgeNameItem> edgeNodes = EdgeNameItem.loadNodeInfoJSON(this, "sample_edge_info.json");
-        Log.d("Edges", edgeNodes.toString());
+        //now can create a list of what the edges are called
+        edgeNodes = EdgeNameItem.loadNodeInfoJSON(this, "sample_edge_info.json");
+        //Log.d("Edges", edgeNodes.toString());
 
-        //Creating graph (this will be done somewhere else eventually)
-        Graph<String, IdentifiedWeightedEdge> ZooGraphConstruct = Directions.loadZooGraphJSON(this, "sample_zoo_graph.json");
-        Log.d("animalGraph", ZooGraphConstruct.toString());
+        //Creating graph
+        ZooGraphConstruct = Directions.loadZooGraphJSON(this, "sample_zoo_graph.json");
+        //Log.d("animalGraph", ZooGraphConstruct.toString());
+
+        //Fetching selected animals
+        selectedAnimals = new PriorityQueue<AnimalNode>((node1, node2) ->
+                Double.compare(node1.distance_from_location, node2.distance_from_location)
+        );
+
+        //setting current location and empty Direction List for directions
+        currentLocation = animalNodes.get(1).id;    //getting first item (gate item)
+        directions = new ArrayList<DirectionStepItem>();
 
         for (AnimalNode animal : animalNodes){
-            animal.updateDistance("entrance_exit_gate", ZooGraphConstruct);
+            selectedAnimals.add(animal);
+        }
+        for (AnimalNode animal : animalNodes){
+            animal.updateDistance(currentLocation, ZooGraphConstruct);
             animal.ETA_time = Directions.getETA(animal.distance_from_location);
         }
-        GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections("arctic_foxes", "lions", ZooGraphConstruct);
+
+        //Getting directions to first animal
+        AnimalNode currAnimal = selectedAnimals.poll();
+        currAnimal = selectedAnimals.poll();
+        currAnimal = selectedAnimals.poll();
+        currAnimal = selectedAnimals.poll();
+        currAnimal = selectedAnimals.poll();
+        currAnimal = selectedAnimals.poll();
+        GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
         int i = 1;
         for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
-            System.out.printf("  %d. Walk %.0f meters along %s from THIS PLACE to THAT PLACE.\n",
-                    i,
-                    ZooGraphConstruct.getEdgeWeight(e),
-                    edgeNodes.get(e.getId()).street);
-//                    test.get(test2.getEdgeSource(e).toString()).name,
-//                    test.get(test2.getEdgeTarget(e).toString()).name);
+            DirectionStepItem temp = new DirectionStepItem(ZooGraphConstruct.getEdgeWeight(e), edgeNodes.get(e.getId()).street, Integer.toString(i));
+            directions.add(temp);
+            Log.d("directions", i + ". " + temp.toString());
             i++;
         }
-        animalAdapter.setAnimalNodeList(animalNodes);
-        System.out.println("distance =" + Directions.computeDistance(pathFound, ZooGraphConstruct));
+        currentLocation = currAnimal.id;
+        Log.d("currentLoc", currAnimal.id);
+        directionAdapter.setDirectionItems(directions);   //will need to be changed to new adapter
+    }
+
+    public void setCurrentLocation(String currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public String getCurrentLocation() {
+        return currentLocation;
     }
 
     public void nextDirections(View view) {
-        //some code for updating the direction recycler
+        directionAdapter = new DirectionStepAdapter();
+        directionAdapter.setHasStableIds(true);
+
+        recyclerView = findViewById(R.id.direction_items);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(directionAdapter);
+
+        directions = new ArrayList<DirectionStepItem>();
+        AnimalNode currAnimal = selectedAnimals.poll();
+        GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
+        int i = 1;
+        for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
+            DirectionStepItem temp = new DirectionStepItem(ZooGraphConstruct.getEdgeWeight(e), edgeNodes.get(e.getId()).street, Integer.toString(i));
+            directions.add(temp);
+            Log.d("directions", temp.toString());
+            i++;
+        }
+        currentLocation = currAnimal.id;
+        Log.d("currentLoc", currAnimal.id);
+        Log.d("Directions", directions.toString());
+        directionAdapter.setDirectionItems(directions);
     }
 
     public void returnToHome(View view) {
