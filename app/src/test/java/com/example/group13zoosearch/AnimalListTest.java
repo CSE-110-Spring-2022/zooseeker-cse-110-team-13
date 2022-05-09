@@ -26,7 +26,7 @@ public class AnimalListTest {
     {
 
         List<AnimalNode> animalNodes = AnimalNode.loadNodeInfoJSON(ApplicationProvider.getApplicationContext(), "sample_node_info.json");
-        assertEquals(animalNodes.get(0).getName(),"" )
+        assertEquals(animalNodes.get(0).getName(),"" );
     }
 
 }
