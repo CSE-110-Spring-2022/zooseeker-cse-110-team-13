@@ -14,13 +14,15 @@
         android:layout_marginStart="52dp"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="63dp"
-        android:layout_marginBottom="621dp"
-        android:text="Search exhibits"
+        android:layout_marginBottom="400dp"
         android:onClick="OnSearchClicked"
+        android:text="Search exhibits"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/view_exhibits_button"
@@ -28,11 +30,12 @@
         android:layout_height="40dp"
         android:layout_marginStart="53dp"
         android:layout_marginEnd="62dp"
-        android:layout_marginBottom="517dp"
+        android:layout_marginBottom="350dp"
         android:onClick="OnViewExhibitsClicked"
         android:text="View exhibits list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 

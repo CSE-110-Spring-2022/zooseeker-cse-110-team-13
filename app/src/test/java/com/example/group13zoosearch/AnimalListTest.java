@@ -3,8 +3,16 @@ package com.example.group13zoosearch;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
+import android.content.Context;
 import static org.junit.Assert.*;
+
+import androidx.test.core.app.ApplicationProvider;
+
+
 public class AnimalListTest {
+
+    //Test the testAnimalList respective classes to check if adding works as expected
     @Test
     public void testAnimalList()
     {
@@ -13,6 +21,12 @@ public class AnimalListTest {
         a.addToSelectAnimal(node);
         assertEquals(a.getFirstValue().getID(),"King Kong");
     }
+    @Test
+    public void testAnimalListSetup()
+    {
 
+        List<AnimalNode> animalNodes = AnimalNode.loadNodeInfoJSON(ApplicationProvider.getApplicationContext(), "sample_node_info.json");
+        assertEquals(animalNodes.get(0).getName(),"" )
+    }
 
 }
