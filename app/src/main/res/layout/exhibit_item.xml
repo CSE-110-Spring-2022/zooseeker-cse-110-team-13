@@ -12,6 +12,7 @@
         android:layout_marginStart="44dp"
         android:layout_marginBottom="5dp"
         android:textSize="20sp"
+        android:hint="selected_exhibit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/delete_button"
         app:layout_constraintStart_toStartOf="parent" />

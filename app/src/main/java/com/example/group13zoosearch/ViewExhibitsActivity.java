@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class ViewExhibitsActivity extends AppCompatActivity {
 
@@ -23,12 +25,18 @@ public class ViewExhibitsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_exhibits);
+
+        TextView textView = (TextView)findViewById(R.id.num_of_exhibits);
+        textView.setText(AnimalList.selected_exhibits.size() + " exhibits have been selected!");
+
         recyclerView = findViewById(R.id.recycler_exhibit_list);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         adapter = new ViewExhibitsAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);
     }
+
+
 
     public void OnGoBackClicked(View view) {
         Intent intent = new Intent(this, MainActivity.class);
