@@ -1,34 +1,33 @@
 package com.example.group13zoosearch;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 public class AnimalList {
-    PriorityQueue<Animal> selected_animals;
-    PriorityQueue<Animal> all_animals;
-    PriorityQueue<Animal> favorited_animals;
+    PriorityQueue<AnimalNode> selected_animals;
+    PriorityQueue<AnimalNode> all_animals;
+    PriorityQueue<AnimalNode> favorited_animals;
     ArrayList<String> exhibits = new ArrayList<>();
     static ArrayList<String> selected_exhibits = new ArrayList<>();
 
     public AnimalList() {
     }
 
-    public void addToSelectAnimal(Animal an){
+    public void addToSelectAnimal(AnimalNode an){
         //TODO: to be implemented
     }
 
-    public void removeFromSelected(Animal an){
+    public void removeFromSelected(AnimalNode an){
         //TODO: to be implemented
     }
 
-    public void favoriteAnimal(Animal an){
+    public void favoriteAnimal(AnimalNode an){
         //TODO: to be implemented
     }
 
-    public PriorityQueue<Animal> search(String str){
+    public PriorityQueue<AnimalNode> search(String str){
         //TODO: to be implemented
-        return new PriorityQueue<Animal>();
+        return new PriorityQueue<AnimalNode>();
     }
 
 }

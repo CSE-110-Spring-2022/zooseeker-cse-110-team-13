@@ -1,7 +1,7 @@
 package com.example.group13zoosearch;
 
 
-public class Animal {
+public class AnimalNode {
     String name;
     String category;
     boolean visited;
@@ -9,11 +9,11 @@ public class Animal {
     int distance_from_location;
     int[] ETA_time;
     //needed for graph traversal
-    Animal parentNode;
+    AnimalNode parentNode;
     int neighborCount;
     //whatever else needs to go here to be added
 
-    Animal(){
+    AnimalNode(){
         name = "";
         category = "";
         parentNode = null;
@@ -24,7 +24,7 @@ public class Animal {
         ETA_time = new int[]{0,0};
     }
 
-    Animal(String n, String c){
+    AnimalNode(String n, String c){
         name = n;
         category = c;
         parentNode = null;

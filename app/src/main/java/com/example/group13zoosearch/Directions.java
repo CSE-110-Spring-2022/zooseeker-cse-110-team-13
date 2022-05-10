@@ -4,7 +4,7 @@ public class Directions {
     //TODO: to be implemented
     //getDirections() needs to be implemented
 
-    public int getDistance(Animal start, Animal end){
+    public int getDistance(AnimalNode start, AnimalNode end){
         return 5;
     }
 
