@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,17 +26,45 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SearchActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
     private SearchAdapter searchAdapter;
-    public AnimalList animalList = new AnimalList();
+//    public AnimalList animalList = new AnimalList();
+    public ArrayList<String> animalList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+//        myDao mydao = ZooDataBase.getSingleton(this).myDao();
+//        List<ZooData> zooDataItems = mydao.getAll();
+//        for(ZooData name : zooDataItems) {
+//            animalList.add(name.name);
+//        }
+//        searchAdapter = new SearchAdapter(animalList);
+//        searchAdapter.setHasStableIds(true);
+//
+//
         recyclerView = findViewById(R.id.search_recycler);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setAdapter(searchAdapter);
 
         buildRecyclerView();
 
+//        final Button addButton = findViewById(R.id.add_button);
+        TextView textView = (TextView) findViewById(R.id.exhibit);
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                String selected_exhibit = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.exhibit)).getText().toString();
+                if(!AnimalList.selected_exhibits.contains(selected_exhibit))
+                    AnimalList.selected_exhibits.add(selected_exhibit);
+
+                Toast.makeText(getApplicationContext(), selected_exhibit + " added!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) { }
+        }));
     }
 
     @Override
@@ -67,7 +97,7 @@ public class SearchActivity extends AppCompatActivity {
         ArrayList<String> filteredList = new ArrayList<>();
 
         // running a for loop to compare elements.
-        for (String item : animalList.exhibits) {
+        for (String item : animalList) {
             // checking if the entered string matched with any item of our recycler view.
             if (item.toLowerCase().contains(text.toLowerCase())) {
                 // if the item is matched we are
@@ -89,14 +119,16 @@ public class SearchActivity extends AppCompatActivity {
     private void buildRecyclerView() {
 //        myDao todoListItemDao = ZooDataBase.getSingleton(this).myDao();
 //        Map<String, ZooData.VertexInfo> zooItems = todoListItemDao.getAll();
-        Map<String,ZooData.VertexInfo>  zooitem = ZooData.loadVertexInfoJSON(this, "sample_node_info.json");
+        List<ZooData> zooitem = ZooData.loadVertexInfoJSON(this, "sample_node_info.json");
 
-        for (Map.Entry<String,ZooData.VertexInfo> entry : zooitem.entrySet())
-            animalList.exhibits.add(entry.getValue().name);
-
+//        for (Map.Entry<String,ZooData.VertexInfo> entry : zooitem.entrySet())
+//            animalList.exhibits.add(entry.getValue().name);
+        for(ZooData vertexInfo : zooitem) {
+            animalList.add(vertexInfo.name);
+        }
 
         // initializing our adapter class.
-        searchAdapter = new SearchAdapter(animalList.exhibits, SearchActivity.this);
+        searchAdapter = new SearchAdapter(animalList, SearchActivity.this);
 //        searchAdapter.setHasStableIDs(true);
         // adding layout manager to our recycler view.
         LinearLayoutManager manager = new LinearLayoutManager(this);
