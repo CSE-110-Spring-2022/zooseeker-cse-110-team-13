@@ -1,0 +1,34 @@
+[
+  {
+    "id": "gorillas",
+    "kind": "exhibit",
+    "name": "Gorillas",
+    "tags": [
+      "gorilla",
+      "monkey",
+      "ape",
+      "mammal"
+    ]
+  },
+  {
+    "id": "lions",
+    "kind": "exhibit",
+    "name": "Lions",
+    "tags": [
+      "lions",
+      "cats",
+      "mammal",
+      "africa"
+    ]
+  },
+  {
+    "id": "arctic_foxes",
+    "kind": "exhibit",
+    "name": "Arctic Foxes",
+    "tags": [
+      "arctic",
+      "fox",
+      "mammal"
+    ]
+  }
+]
