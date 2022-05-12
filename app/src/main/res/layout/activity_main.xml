@@ -14,7 +14,7 @@
         android:layout_marginStart="52dp"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="63dp"
-        android:layout_marginBottom="621dp"
+        android:layout_marginBottom="121dp"
         android:text="Search exhibits"
         android:onClick="OnSearchClicked"
         app:layout_constraintBottom_toBottomOf="parent"
