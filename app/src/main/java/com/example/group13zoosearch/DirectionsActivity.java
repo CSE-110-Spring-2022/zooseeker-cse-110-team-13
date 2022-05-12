@@ -71,6 +71,7 @@ public class DirectionsActivity extends AppCompatActivity {
 
         //Getting directions to first animal
         AnimalNode currAnimal = selectedAnimals.poll();
+
         GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
         int i = 1;
         DirectionStepItem temp = null;
@@ -82,6 +83,7 @@ public class DirectionsActivity extends AppCompatActivity {
         }
         currentLocation = currAnimal.id;
         Log.d("currentLoc", currAnimal.id);
+
         directionAdapter.setDirectionItems(directions);
     }
 
@@ -105,6 +107,7 @@ public class DirectionsActivity extends AppCompatActivity {
         AnimalNode currAnimal = selectedAnimals.poll();
         GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
         int i = 1;
+
         DirectionStepItem temp = null;
 //        List<IdentifiedWeightedEdge> test = pathFound.getEdgeList();
 //        for( int i = 0; i< test.size(); i++){
