@@ -71,22 +71,18 @@ public class DirectionsActivity extends AppCompatActivity {
 
         //Getting directions to first animal
         AnimalNode currAnimal = selectedAnimals.poll();
-        currAnimal = selectedAnimals.poll();
-        currAnimal = selectedAnimals.poll();
-        currAnimal = selectedAnimals.poll();
-        currAnimal = selectedAnimals.poll();
-        currAnimal = selectedAnimals.poll();
         GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
         int i = 1;
+        DirectionStepItem temp = null;
         for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
-            DirectionStepItem temp = new DirectionStepItem(ZooGraphConstruct.getEdgeWeight(e), edgeNodes.get(e.getId()).street, Integer.toString(i));
+            temp = new DirectionStepItem(ZooGraphConstruct.getEdgeWeight(e), edgeNodes.get(e.getId()).street, Integer.toString(i));
             directions.add(temp);
             Log.d("directions", i + ". " + temp.toString());
             i++;
         }
         currentLocation = currAnimal.id;
         Log.d("currentLoc", currAnimal.id);
-        directionAdapter.setDirectionItems(directions);   //will need to be changed to new adapter
+        directionAdapter.setDirectionItems(directions);
     }
 
     public void setCurrentLocation(String currentLocation) {
@@ -109,10 +105,16 @@ public class DirectionsActivity extends AppCompatActivity {
         AnimalNode currAnimal = selectedAnimals.poll();
         GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
         int i = 1;
+        DirectionStepItem temp = null;
+//        List<IdentifiedWeightedEdge> test = pathFound.getEdgeList();
+//        for( int i = 0; i< test.size(); i++){
+//            temp = new DirectionStepItem(ZooGraphConstruct.getEdgeWeight(e), edgeNodes.get(e.getId()).street, Integer.toString(i));
+//        }
         for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
-            DirectionStepItem temp = new DirectionStepItem(ZooGraphConstruct.getEdgeWeight(e), edgeNodes.get(e.getId()).street, Integer.toString(i));
+            temp = new DirectionStepItem(ZooGraphConstruct.getEdgeWeight(e), edgeNodes.get(e.getId()).street, Integer.toString(i));
             directions.add(temp);
             Log.d("directions", temp.toString());
+            Log.d("Directions", directions.toString());
             i++;
         }
         currentLocation = currAnimal.id;
