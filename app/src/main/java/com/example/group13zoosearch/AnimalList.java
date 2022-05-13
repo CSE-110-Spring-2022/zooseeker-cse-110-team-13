@@ -1,27 +1,44 @@
 package com.example.group13zoosearch;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.List;
 
 public class AnimalList {
-    PriorityQueue<AnimalNode> selected_animals;
-    PriorityQueue<AnimalNode> all_animals;
+    PriorityQueue<AnimalNode> selected_animal_nodes;
+    Map<String, AnimalNode> all_exhibits;
     PriorityQueue<AnimalNode> favorited_animals;
-    ArrayList<String> exhibits = new ArrayList<>();
     static ArrayList<String> selected_exhibits = new ArrayList<>();
+    public Context context;
 
-    public AnimalList() {
-        selected_exhibits.add("xijiyang");    //kbell: what is this for?
+    public AnimalList(Context context, Map<String, AnimalNode> all_exhibits){
+        this.context = context;
+        this.all_exhibits = all_exhibits;
     }
 
-    public void addToSelectAnimal(AnimalNode an){
-        //TODO: to be implemented
+    public PriorityQueue<AnimalNode> generatePriorityQueue(){
+        selected_animal_nodes = new PriorityQueue<AnimalNode>((node1, node2) ->
+                Double.compare(node1.distance_from_location, node2.distance_from_location)
+        );
+
+        //Finding all animalNodes corresponding to strings in specified list
+        for(String str : selected_exhibits){
+            selected_animal_nodes.add(all_exhibits.get(str));
+        }
+
+        return selected_animal_nodes;
     }
 
-    public void removeNode(List<AnimalNode> list, AnimalNode an){
-        list.remove(an); //TODO: probably needs to be edited to work with priority queue
+    //adds animal to queue
+    public void addAnimal(AnimalNode an){
+        selected_animal_nodes.add(an);
+    }
+
+    //pops animal off queue
+    public AnimalNode deleteAnimal(){
+        return selected_animal_nodes.poll();
     }
 
     public void favoriteSelected(AnimalNode an){

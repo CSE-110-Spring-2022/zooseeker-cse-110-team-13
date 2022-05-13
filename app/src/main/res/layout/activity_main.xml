@@ -15,14 +15,14 @@
         android:layout_marginTop="70dp"
         android:layout_marginEnd="63dp"
         android:layout_marginBottom="121dp"
-        android:text="Search exhibits"
         android:onClick="OnSearchClicked"
+        android:text="Search exhibits"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/view_exhibits_button"
@@ -38,35 +38,30 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.018" />
+        app:layout_constraintVertical_bias="0.091" />
 
     <Button
         android:id="@+id/Directionbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="directionsLaunched"
+        android:onClick="OnDirectionClicked"
         android:text="Directions"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.909" />
+        app:layout_constraintVertical_bias="0.922" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="296dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="69dp"
-        android:layout_marginEnd="58dp"
-        android:layout_marginBottom="408dp"
-        android:onClick="OnDirectionClicked"
-        android:text="DIRECTION"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/animal_node_items"
+        android:layout_width="335dp"
+        android:layout_height="469dp"
+        android:isScrollContainer="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_exhibits_button" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.274" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
