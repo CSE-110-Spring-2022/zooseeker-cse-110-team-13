@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -72,6 +76,4 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 //        editor.commit();
     }
-
-
 }
