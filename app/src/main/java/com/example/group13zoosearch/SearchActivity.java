@@ -1,8 +1,5 @@
 package com.example.group13zoosearch;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,20 +7,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity {
-
     public RecyclerView recyclerView;
     private SearchAdapter searchAdapter;
 //    public AnimalList animalList = new AnimalList();
@@ -119,13 +115,12 @@ public class SearchActivity extends AppCompatActivity {
     private void buildRecyclerView() {
 //        myDao todoListItemDao = ZooDataBase.getSingleton(this).myDao();
 //        Map<String, ZooData.VertexInfo> zooItems = todoListItemDao.getAll();
-        List<ZooData> zooitem = ZooData.loadVertexInfoJSON(this, "sample_node_info.json");
+        Map<String, AnimalNode> zooitems = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
+        String[] animalIds = zooitems.keySet().toArray(new String[0]);
 
 //        for (Map.Entry<String,ZooData.VertexInfo> entry : zooitem.entrySet())
 //            animalList.exhibits.add(entry.getValue().name);
-        for(ZooData vertexInfo : zooitem) {
-            animalList.add(vertexInfo.name);
-        }
+        animalList.addAll(Arrays.asList(animalIds));
 
         // initializing our adapter class.
         searchAdapter = new SearchAdapter(animalList, SearchActivity.this);

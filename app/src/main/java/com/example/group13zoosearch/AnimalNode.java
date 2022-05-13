@@ -14,6 +14,9 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AnimalNode {
     //Public fields, may choose to make some of these private in the future
@@ -44,27 +47,41 @@ public class AnimalNode {
     public String toString() {
         return "AnimalNode{" +
                 "id='" + id + '\'' +
-                ", \n kind='" + kind + '\'' +
-                ", \n name='" + name + '\'' +
-                ", \n tags=" + tags +
-                ", \n visited=" + visited +
-                ", \n favorited=" + favorited +
-                ", \n distance_from_location=" + distance_from_location +
-                ", \n ETA_time=" + ETA_time +
-                '}';
+                ", distance=" + distance_from_location +
+                "}\n";
     }
 
-//small note, should probably either return a priority queue OR after loading, and generating paths put them in to a priority queue
-    public static List<AnimalNode> loadNodeInfoJSON(Context context, String path){
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AnimalNode)) return false;
+        AnimalNode that = (AnimalNode) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    //small note, should probably either return a priority queue OR after loading, and generating paths put them in to a priority queue
+    public static Map<String, AnimalNode> loadNodeInfoJSON(Context context, String path){
         try {
             InputStream input = context.getAssets().open(path);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
             Type type = new TypeToken<List<AnimalNode>>(){}.getType();
-            return gson.fromJson(reader, type);
+            List<AnimalNode> data = gson.fromJson(reader, type);
+
+            Map<String, AnimalNode> indexedNodeData = data
+                    .stream()
+                    .collect(Collectors.toMap(v -> v.id, datum -> datum));
+
+            return indexedNodeData;
+
         } catch (IOException e){
             e.printStackTrace();
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
     }
 

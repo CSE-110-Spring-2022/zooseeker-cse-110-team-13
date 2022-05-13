@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
 
-public class DirectionStepAdapter extends RecyclerView.Adapter<DirectionStepAdapter.ViewHolder>{
-    private List<DirectionStepItem> directionItems = Collections.emptyList();
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
+    private List<String> directionItems = Collections.emptyList();
 
-    public void setDirectionItems(List<DirectionStepItem> newDirectionItems){
+    public void setDirectionItems(List<String> newDirectionItems){
         this.directionItems.clear();
         this.directionItems = newDirectionItems;
         notifyDataSetChanged();
@@ -31,7 +31,7 @@ public class DirectionStepAdapter extends RecyclerView.Adapter<DirectionStepAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setDirectionStepItem(directionItems.get(position));
+        holder.setString(directionItems.get(position));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DirectionStepAdapter extends RecyclerView.Adapter<DirectionStepAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView nameText;
-        private DirectionStepItem directionholder;
+        private String directionholder;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -49,14 +49,14 @@ public class DirectionStepAdapter extends RecyclerView.Adapter<DirectionStepAdap
         }
 
         //Getters
-        public DirectionStepItem getDirectionStepItem() {
+        public String getString() {
             return directionholder;
         }
 
 
-        public void setDirectionStepItem(DirectionStepItem direction) {
+        public void setString(String direction) {
             this.directionholder = direction;
-            this.nameText.setText(direction.toString());
+            this.nameText.setText(direction);
         }
     }
 
