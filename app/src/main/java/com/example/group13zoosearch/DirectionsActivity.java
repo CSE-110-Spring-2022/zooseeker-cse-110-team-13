@@ -1,5 +1,6 @@
 package com.example.group13zoosearch;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ public class DirectionsActivity extends AppCompatActivity {
     private List<String> directions;
     private String currentLocation;
     private TextView animalToVisit;
+    private boolean detailed;
     ListAdapter listAdapter;
 
     @Override
@@ -42,7 +44,7 @@ public class DirectionsActivity extends AppCompatActivity {
         recyclerView.setAdapter(listAdapter);
 
         //CREATING LISTS:
-        //create AnimalNode list
+        //create AnimalNode list   TODO: create and store these in AnimalList at launch so every activity has access to these
         animalNodes = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
         Log.d("Animal List", animalNodes.toString());
 
@@ -70,7 +72,7 @@ public class DirectionsActivity extends AppCompatActivity {
         }
         Log.d("Animal Queue Sorted", selectedAnimals.toString());
 
-        //Getting directions to first animal
+        //Getting directions to first animal   TODO replace this with method from Directions.java
         if (!selectedAnimals.isEmpty()) {
             AnimalNode currAnimal = selectedAnimals.poll();
             //setting Animal name text view
@@ -110,6 +112,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void nextDirections(View view) {
+        //TODO: need to add this logic to Directions.java to make it easier to be used in other places
         listAdapter = new ListAdapter();
         listAdapter.setHasStableIds(true);
 
@@ -149,7 +152,31 @@ public class DirectionsActivity extends AppCompatActivity {
         }
     }
 
+    public void previousDirections(View view) {
+        //TODO: Add functionality for previous button clicked
+        //adds animals to an ordered list (Arraylist or queue whichever is easier) that has all the
+        //animals previously visited in FILO order
+    }
+
+    public void skipDirections(View view) {
+        //TODO: Add functionality for skip
+        //Basically the same as next btn except does not add animal to previous animals list
+    }
+
+    public void toggleDetailed(View view) {
+        if(detailed){ detailed = false; } else {detailed = true;}
+        Log.d("Detailed Directions:", String.valueOf(detailed));
+        //TODO some call to refresh directions
+    }
+
+    //APP NAVIGATION FUNCTIONS
     public void returnToHome(View view) {
+        finish();
+    }
+
+    public void returnToRoutePlan(View view) {
+        Intent intent = new Intent(this, RoutePlanActivity.class);
+        startActivity(intent);
         finish();
     }
 }
