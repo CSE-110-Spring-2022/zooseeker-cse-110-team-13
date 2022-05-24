@@ -100,4 +100,9 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 //        editor.commit();
     }
+
+    public void OnRoutePlanClicked(View view) {
+        Intent intent = new Intent(this, RoutePlanActivity.class);
+        startActivity(intent);
+    }
 }
