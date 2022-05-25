@@ -21,9 +21,6 @@ public class AnimalList {
     private Map<String, EdgeNameItem> edges;
     private Graph<String, IdentifiedWeightedEdge> zoo_graph_info;
 
-    //not currently using
-    PriorityQueue<AnimalNode> favorited_animals;
-
     public AnimalList(Context context, String nodePath, String edgePath, String graphPath){
         this.context = context;
         this.all_animal_nodes = AnimalNode.loadNodeInfoJSON(context, nodePath);;
