@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public class AnimalList {
+
     static PriorityQueue<AnimalNode> selected_animal_nodes;
     static ArrayList<AnimalNode> visited_animal_nodes;
     static ArrayList<String> selected_exhibits = new ArrayList<>();
@@ -21,9 +22,6 @@ public class AnimalList {
     private Map<String, AnimalNode> all_animal_nodes;
     private Map<String, EdgeNameItem> edges;
     private Graph<String, IdentifiedWeightedEdge> zoo_graph_info;
-
-    //not currently using
-    PriorityQueue<AnimalNode> favorited_animals;
 
     public AnimalList(Context context, String nodePath, String edgePath, String graphPath){
         this.context = context;

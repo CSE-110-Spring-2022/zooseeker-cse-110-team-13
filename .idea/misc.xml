@@ -5,14 +5,18 @@
       <map>
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_directions.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_main.xml" value="0.22916666666666666" />
-        <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_route_plan.xml" value="0.2682291666666667" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_search.xml" value="0.2640625" />
-        <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/activity_view_exhibits.xml" value="0.20677083333333332" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/animal_node_item.xml" value="0.33" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/direction_step_item.xml" value="0.23697916666666666" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/exhibit_item.xml" value="0.2677083333333333" />
         <entry key="..\:/Users/Kiersten/Documents/University/School/CSE/CSE 110/Group13ZooSearch/app/src/main/res/layout/search_item.xml" value="0.22708333333333333" />
-        <entry key="..\:/Users/qq227/Desktop/zooseeker-cse-110-team-13/app/src/main/res/layout/activity_search.xml" value="0.12132725430597771" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/activity_search.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/activity_view_exhibits.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/animal_node_item.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/direction_step_item.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/exhibit_item.xml" value="0.4036458333333333" />
+        <entry key="app/src/main/res/layout/search_item.xml" value="0.4036458333333333" />
       </map>
     </option>
   </component>
