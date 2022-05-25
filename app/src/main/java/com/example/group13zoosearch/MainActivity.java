@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     AnimalNodeAdapter animalAdapter;
     Button saveBtn;
 
+    //testing some refactoring
+    public AnimalList info;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
         saveBtn = findViewById(R.id.save_btn);
         loadExhibits();
+        info = new AnimalList(this, "exhibit_info.json", "trail_info.json", "zoo_graph");
+
         animalAdapter = new AnimalNodeAdapter();
         animalAdapter.setHasStableIds(true);
 
         recyclerView = findViewById(R.id.animal_node_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(animalAdapter);
-        animalNodes = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
+        animalNodes = AnimalNode.loadNodeInfoJSON(this, "exhibit_info.json");
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         //This was me messing around with a recycler view on the main activity page
         // we can decide to remove this later
-        AnimalList anList = new AnimalList(this, animalNodes);
-        selectedAnimals = anList.generatePriorityQueue();
+        selectedAnimals = info.generatePriorityQueue();
         ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>(selectedAnimals);
         animalAdapter.setAnimalNodeList(temp);
     }
