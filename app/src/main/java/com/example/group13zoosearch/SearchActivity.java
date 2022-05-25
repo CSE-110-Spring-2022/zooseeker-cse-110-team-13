@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity {
@@ -123,7 +122,7 @@ public class SearchActivity extends AppCompatActivity {
     private void buildRecyclerView() {
 //        myDao todoListItemDao = ZooDataBase.getSingleton(this).myDao();
 //        Map<String, ZooData.VertexInfo> zooItems = todoListItemDao.getAll();
-        Map<String, AnimalNode> zooitems = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
+        Map<String, AnimalNode> zooitems = AnimalNode.loadNodeInfoJSON(this, "exhibit_info.json");
         String[] animalIds = zooitems.keySet().toArray(new String[0]);
 
 
