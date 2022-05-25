@@ -10,7 +10,7 @@ public class AnimalList {
     PriorityQueue<AnimalNode> selected_animal_nodes;
     Map<String, AnimalNode> all_exhibits;
     PriorityQueue<AnimalNode> favorited_animals;
-    static ArrayList<String> selected_exhibits = new ArrayList<>();
+    static ArrayList<String> selected_exhibits;
     public Context context;
 
     public AnimalList(Context context, Map<String, AnimalNode> all_exhibits){

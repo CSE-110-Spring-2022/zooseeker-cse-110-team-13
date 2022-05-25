@@ -104,15 +104,17 @@ public class SearchActivity extends AppCompatActivity {
 //            }
 //        }
         for (AnimalNode a: myList) {
-            if((a.name.toLowerCase().contains(text.toLowerCase()))||(a.tags.contains(text.toLowerCase()))){
-                filteredList.add(a.name);
+            if (a.kind.equals("exhibit")) {
+                if((a.id.toLowerCase().contains(text.toLowerCase()))||(a.tags.contains(text.toLowerCase()))){
+                    filteredList.add(a.id);
+                }
             }
         }
 
         if (filteredList.isEmpty()) {
             // if no item is added in filtered list we are
             // displaying a toast message as no data found.
-            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show();
         } else {
             // at last we are passing that filtered
             // list to our adapter class.
@@ -131,9 +133,11 @@ public class SearchActivity extends AppCompatActivity {
             myList.add(zooitems.get(id));
         }
 
-//        for (Map.Entry<String,ZooData.VertexInfo> entry : zooitem.entrySet())
-//            animalList.exhibits.add(entry.getValue().name);
-        animalList.addAll(Arrays.asList(animalIds));
+        for (Map.Entry<String, AnimalNode> entry : zooitems.entrySet()) {
+            if (entry.getValue().kind.equals("exhibit"))
+                animalList.add(entry.getValue().id);
+        }
+//        animalList.addAll(Arrays.asList(animalIds));
 
         // initializing our adapter class.
         searchAdapter = new SearchAdapter(animalList, SearchActivity.this);
