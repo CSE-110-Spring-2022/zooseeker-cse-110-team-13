@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button saveBtn;
 
     //testing some refactoring
-    public AnimalList info;
+    public AnimalList info;         //this animalList will hold all list objects in it
 
 
     @Override
