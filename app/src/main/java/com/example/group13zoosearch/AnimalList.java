@@ -12,7 +12,7 @@ public class AnimalList {
     PriorityQueue<AnimalNode> selected_animal_nodes;
     Map<String, AnimalNode> all_exhibits;
     PriorityQueue<AnimalNode> favorited_animals;
-    static ArrayList<String> selected_exhibits
+    static ArrayList<String> selected_exhibits;
     ArrayList<AnimalNode> visited_animal_nodes;
     public Context context;
 
