@@ -24,6 +24,7 @@ public class SearchActivity extends AppCompatActivity {
     private SearchAdapter searchAdapter;
 //    public AnimalList animalList = new AnimalList();
     public ArrayList<String> animalList = new ArrayList<>();
+    public ArrayList<AnimalNode> myList = new ArrayList<AnimalNode>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,14 +94,20 @@ public class SearchActivity extends AppCompatActivity {
         ArrayList<String> filteredList = new ArrayList<>();
 
         // running a for loop to compare elements.
-        for (String item : animalList) {
-            // checking if the entered string matched with any item of our recycler view.
-            if (item.toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
-                filteredList.add(item);
+//        for (String item : animalList) {
+//            // checking if the entered string matched with any item of our recycler view.
+//            if (item.toLowerCase().contains(text.toLowerCase())) {
+//                // if the item is matched we are
+//                // adding it to our filtered list.
+//                filteredList.add(item);
+//            }
+//        }
+        for (AnimalNode a: myList) {
+            if((a.name.toLowerCase().contains(text.toLowerCase()))||(a.tags.contains(text.toLowerCase()))){
+                filteredList.add(a.name);
             }
         }
+
         if (filteredList.isEmpty()) {
             // if no item is added in filtered list we are
             // displaying a toast message as no data found.
@@ -115,8 +122,13 @@ public class SearchActivity extends AppCompatActivity {
     private void buildRecyclerView() {
 //        myDao todoListItemDao = ZooDataBase.getSingleton(this).myDao();
 //        Map<String, ZooData.VertexInfo> zooItems = todoListItemDao.getAll();
-        Map<String, AnimalNode> zooitems = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
+        Map<String, AnimalNode> zooitems = AnimalNode.loadNodeInfoJSON(this, "exhibit_info.json");
         String[] animalIds = zooitems.keySet().toArray(new String[0]);
+
+
+        for(String id: animalIds){
+            myList.add(zooitems.get(id));
+        }
 
 //        for (Map.Entry<String,ZooData.VertexInfo> entry : zooitem.entrySet())
 //            animalList.exhibits.add(entry.getValue().name);

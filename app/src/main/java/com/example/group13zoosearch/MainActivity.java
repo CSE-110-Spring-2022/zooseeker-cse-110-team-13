@@ -24,11 +24,16 @@ public class MainActivity extends AppCompatActivity {
     private PriorityQueue<AnimalNode> selectedAnimals;
     AnimalNodeAdapter animalAdapter;
 
+    //testing some refactoring
+    public AnimalList info;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        info = new AnimalList(this, "exhibit_info.json", "trail_info.json", "zoo_graph");
 
         animalAdapter = new AnimalNodeAdapter();
         animalAdapter.setHasStableIds(true);
@@ -36,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.animal_node_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(animalAdapter);
-        animalNodes = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
+        animalNodes = AnimalNode.loadNodeInfoJSON(this, "exhibit_info.json");
 
         loadProfile();
     }
@@ -47,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         //This was me messing around with a recycler view on the main activity page
         // we can decide to remove this later
-        AnimalList anList = new AnimalList(this, animalNodes);
-        selectedAnimals = anList.generatePriorityQueue();
+        selectedAnimals = info.generatePriorityQueue();
         ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>(selectedAnimals);
         animalAdapter.setAnimalNodeList(temp);
     }
@@ -99,5 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
         editor.apply();
 //        editor.commit();
+    }
+
+    public void OnRoutePlanClicked(View view) {
+        Intent intent = new Intent(this, RoutePlanActivity.class);
+        startActivity(intent);
     }
 }
