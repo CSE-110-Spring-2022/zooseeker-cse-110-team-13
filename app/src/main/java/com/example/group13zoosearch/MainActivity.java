@@ -4,13 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -23,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Map<String, AnimalNode> animalNodes;
     private PriorityQueue<AnimalNode> selectedAnimals;
     AnimalNodeAdapter animalAdapter;
+    Button saveBtn;
 
     //testing some refactoring
     public AnimalList info;
@@ -30,9 +38,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        saveBtn = findViewById(R.id.save_btn);
+        loadExhibits();
         info = new AnimalList(this, "exhibit_info.json", "trail_info.json", "zoo_graph");
 
         animalAdapter = new AnimalNodeAdapter();
@@ -43,7 +54,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(animalAdapter);
         animalNodes = AnimalNode.loadNodeInfoJSON(this, "exhibit_info.json");
 
-        loadProfile();
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // calling method to save data in shared prefs.
+                saveExhibits();
+            }
+        });
     }
 
     @Override
@@ -72,37 +89,29 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //code
-        saveProfile();
-    }
 
-    public void loadProfile() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        //code
-//        SharedPreferences.Editor editor = preferences.edit();
-        preferences.getStringSet("key", test);
+    private void loadExhibits() {
 
-        for (String value : test) {
-            AnimalList.selected_exhibits.add(value);
-        }
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preference",MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("exhibits list", null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        AnimalList.selected_exhibits = gson.fromJson(json, type);
+
+        if (AnimalList.selected_exhibits == null)
+            AnimalList.selected_exhibits = new ArrayList<>();
 
     }
 
-    public void saveProfile() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        //code
-        for (String value : AnimalList.selected_exhibits) {
-            test.add(value);
-        }
-
-        editor.putStringSet("key", test);
-
+    private void saveExhibits() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preference",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(AnimalList.selected_exhibits);
+        editor.putString("exhibits list", json);
         editor.apply();
-//        editor.commit();
+
+        Toast.makeText(this, "Saved Selected Exhibits List to Shared preferences. ", Toast.LENGTH_SHORT).show();
     }
 
     public void OnRoutePlanClicked(View view) {

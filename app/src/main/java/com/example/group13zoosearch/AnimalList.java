@@ -10,8 +10,10 @@ import java.util.PriorityQueue;
 
 public class AnimalList {
     PriorityQueue<AnimalNode> selected_animal_nodes;
+    Map<String, AnimalNode> all_exhibits;
+    PriorityQueue<AnimalNode> favorited_animals;
+    static ArrayList<String> selected_exhibits;
     ArrayList<AnimalNode> visited_animal_nodes;
-    static ArrayList<String> selected_exhibits = new ArrayList<>();
     public Context context;
 
     //loaded data from JSON files
