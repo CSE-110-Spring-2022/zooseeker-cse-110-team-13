@@ -17,10 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class DirectionsActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
     private PriorityQueue<AnimalNode> selectedAnimals;
+    private Queue<AnimalNode> visitedAnimals;
     private Map<String, AnimalNode> animalNodes;
     private Map<String, EdgeNameItem> edgeNodes;
     private Graph<String, IdentifiedWeightedEdge> ZooGraphConstruct;
@@ -28,6 +30,7 @@ public class DirectionsActivity extends AppCompatActivity {
     private String currentLocation;
     private TextView animalToVisit;
     private boolean detailed;
+    private boolean noSelectedAnimals;
     ListAdapter listAdapter;
 
     @Override
@@ -45,19 +48,19 @@ public class DirectionsActivity extends AppCompatActivity {
 
         //CREATING LISTS:
         //create AnimalNode list   TODO: create and store these in AnimalList at launch so every activity has access to these
-        animalNodes = AnimalNode.loadNodeInfoJSON(this, "sample_node_info.json");
+        animalNodes = AnimalNode.loadNodeInfoJSON(this, "exhibit_info.json");
         Log.d("Animal List", animalNodes.toString());
 
         //now can create a list of what the edges are called
-        edgeNodes = EdgeNameItem.loadNodeInfoJSON(this, "sample_edge_info.json");
+        edgeNodes = EdgeNameItem.loadNodeInfoJSON(this, "trail_info.json");
         Log.d("Edges", edgeNodes.toString());
 
         //Creating graph
-        ZooGraphConstruct = Directions.loadZooGraphJSON(this, "sample_zoo_graph.json");
+        ZooGraphConstruct = Directions.loadZooGraphJSON(this, "zoo_graph.json");
         Log.d("animalGraph", ZooGraphConstruct.toString());
 
         //Fetching selected animals
-        AnimalList anList = new AnimalList(this, animalNodes);
+        AnimalList anList = new AnimalList(this, "exhibit_info.json","trail_info.json","zoo_graph.json");
         selectedAnimals = anList.generatePriorityQueue();
         Log.d("Animal Queue created", selectedAnimals.toString());
 
@@ -79,7 +82,14 @@ public class DirectionsActivity extends AppCompatActivity {
             animalToVisit = (TextView) findViewById(R.id.currentAnimaltxt);
             animalToVisit.setText(currAnimal.name);
 
-            GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
+            GraphPath<String, IdentifiedWeightedEdge> pathFound;
+
+            if(currAnimal.group_id == null) {
+                pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
+            } else {
+                pathFound = Directions.computeDirections(currentLocation, currAnimal.group_id, ZooGraphConstruct);
+            }
+
             List<String> nodes = pathFound.getVertexList();
             Log.d("nodes: ", nodes.toString());
 
@@ -92,9 +102,17 @@ public class DirectionsActivity extends AppCompatActivity {
                 Log.d("directions", temp.toString());
                 i++;
             }
-            currentLocation = currAnimal.id;
+
+            //TODO change this to just get the user's current GPS location
+            if(currAnimal.group_id == null) {
+                currentLocation = currAnimal.id;
+            } else {
+                currentLocation = currAnimal.group_id;
+            }
             Log.d("Arriving at:", currAnimal.id);
+
         } else {
+            noSelectedAnimals = true;
             TextView noAnimalsSelected = (TextView) findViewById(R.id.no_animals_selected_txt);
             TextView headingToText = (TextView) findViewById(R.id.headingTotxt);
             noAnimalsSelected.setVisibility(View.VISIBLE);
@@ -104,7 +122,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void setCurrentLocation(String currentLocation) {
-        this.currentLocation = currentLocation;
+        this.currentLocation = currentLocation;     //TODO need to change to work with GPS location
     }
 
     public String getCurrentLocation() {
@@ -112,6 +130,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void nextDirections(View view) {
+        if (noSelectedAnimals) return;
         //TODO: need to add this logic to Directions.java to make it easier to be used in other places
         listAdapter = new ListAdapter();
         listAdapter.setHasStableIds(true);
@@ -122,6 +141,17 @@ public class DirectionsActivity extends AppCompatActivity {
 
         directions = new ArrayList<String>();
 
+        if(selectedAnimals.isEmpty()){
+            TextView noAnimalsSelected = (TextView) findViewById(R.id.no_animals_selected_txt);
+            TextView headingToText = (TextView) findViewById(R.id.headingTotxt);
+            TextView currentAnimalText = (TextView) findViewById(R.id.currentAnimaltxt);
+            noAnimalsSelected.setText("All animal exhibits have been visited!");
+            noAnimalsSelected.setVisibility(View.VISIBLE);
+            headingToText.setVisibility(View.INVISIBLE);
+            currentAnimalText.setVisibility(View.INVISIBLE);
+            return;
+        }
+
         //updating distance for new closet node
         for (AnimalNode animal : selectedAnimals){
             animal.updateDistance(currentLocation, ZooGraphConstruct);
@@ -131,7 +161,14 @@ public class DirectionsActivity extends AppCompatActivity {
         if(!selectedAnimals.isEmpty()) {
             AnimalNode currAnimal = selectedAnimals.poll();
             animalToVisit.setText(currAnimal.name);
-            GraphPath<String, IdentifiedWeightedEdge> pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
+
+            GraphPath<String, IdentifiedWeightedEdge> pathFound;
+
+            if(currAnimal.group_id == null) {
+                pathFound = Directions.computeDirections(currentLocation, currAnimal.id, ZooGraphConstruct);
+            } else {
+                pathFound = Directions.computeDirections(currentLocation, currAnimal.group_id, ZooGraphConstruct);
+            }
             List<String> nodes = pathFound.getVertexList();
             Log.d("nodes: ", nodes.toString());
 
@@ -144,7 +181,14 @@ public class DirectionsActivity extends AppCompatActivity {
                 Log.d("Directions", temp.toString());
                 i++;
             }
-            currentLocation = currAnimal.id;
+
+            //TODO change this to just get the user's current GPS location
+            if(currAnimal.group_id == null) {
+                currentLocation = currAnimal.id;
+            } else {
+                currentLocation = currAnimal.group_id;
+            }
+
             Log.d("Arriving at:", currAnimal.id);
             listAdapter.setDirectionItems(directions);
         } else {

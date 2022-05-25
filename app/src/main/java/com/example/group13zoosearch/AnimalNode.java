@@ -24,20 +24,24 @@ public class AnimalNode {
     public String id;
     public String kind;
     public String name;
+    public String group_id;
     public List<String> tags;
+    public double lat; //may need to be changed to something else
+    public double lng;
 
-    public boolean visited;
     public boolean favorited;
     public double distance_from_location;
     public double ETA_time; //time in minutes
 
 
-    AnimalNode(String id, String kind, String name, List<String> tags) {
+    AnimalNode(String id, String group_id, String kind, String name, List<String> tags, double lat, double lng) {
         this.id = id;
+        this.group_id = group_id;
         this.kind = kind;
         this.name = name;
         this.tags = tags;
-        this.visited = false;
+        this.lat = lat;
+        this.lng = lng;
         this.favorited = false;
         this.distance_from_location = 0;
         this.ETA_time = 0;
@@ -47,6 +51,9 @@ public class AnimalNode {
     public String toString() {
         return "AnimalNode{" +
                 "id='" + id + '\'' +
+                "groupID=" + group_id + '\'' +
+//                "lat=" + lat + '\'' +
+//                "lng=" + lng + '\'' +
                 ", distance=" + distance_from_location +
                 "}\n";
     }
@@ -87,7 +94,12 @@ public class AnimalNode {
 
     //Updates the distance of current node given a starting node
     public void updateDistance(String start, Graph<String, IdentifiedWeightedEdge> graph){
-        this.distance_from_location = Directions.computeDistance(start, this.id, graph);
+        if (start.equals(this.id)) return;
+        if (this.group_id == null) {
+            this.distance_from_location = Directions.computeDistance(start, this.id, graph);
+        } else {
+            this.distance_from_location = Directions.computeDistance(start, this.group_id, graph);
+        }
     }
 
 }
