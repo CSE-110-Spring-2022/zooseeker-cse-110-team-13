@@ -47,6 +47,10 @@ dependencies {
     implementation "org.jgrapht:jgrapht-core:$jgrapht_version"
     implementation "org.jgrapht:jgrapht-io:$jgrapht_version"
 
+
+    //maps implementation
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
