@@ -89,6 +89,12 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Search result filter
+     *
+     * Modified from online sources
+     * URL: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview/
+     */
     private void filter(String text) {
         // creating a new array list to filter our data.
         ArrayList<String> filteredList = new ArrayList<>();

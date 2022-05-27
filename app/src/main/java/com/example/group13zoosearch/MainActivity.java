@@ -90,8 +90,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void loadExhibits() {
+    /**
+     * using json and gson in sharedpreference to save and load
+     *
+     * modified from online sources geeksforgeeks
+     * URL: https://www.geeksforgeeks.org/how-to-save-arraylist-to-sharedpreferences-in-android/
+     */
 
+    private void loadExhibits() {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preference",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("exhibits list", null);
