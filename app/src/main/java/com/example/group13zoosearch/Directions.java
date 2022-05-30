@@ -24,7 +24,6 @@ public class Directions {
      *
      * Modeled after ZooGraph from ZooSeeker-Assets folder in CSE-110-Sprint-2022 gitHub
      * URL: https://github.com/CSE-110-Spring-2022/ZooSeeker-Assets.git
-     * TODO need to run tests to make sure this graph works for all cases
      */
     public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(Context context, String path) {
         // Create an empty graph to populate.

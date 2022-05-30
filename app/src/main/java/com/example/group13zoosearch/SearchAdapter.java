@@ -27,6 +27,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 //        this.animalArrayList = animalArrayList;
 //    }
 
+    /**
+     * Search result filter list
+     *
+     * Modified from online sources
+     * URL: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview/
+     */
     // method for filtering our recyclerview items.
     public void filterList(ArrayList<String> filteredList) {
         // below line is to add our filtered
