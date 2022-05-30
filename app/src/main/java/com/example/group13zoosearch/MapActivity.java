@@ -79,6 +79,39 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     }
+
+    private void getCurrentLocation(){
+        @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null){
+                         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                             @Override
+                             public void onMapReady(@NonNull GoogleMap googleMap) {
+                                 LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+
+                                 MarkerOptions Options = new MarkerOptions().position(latLng).title("Your position");
+                                 currLoc = latLng;
+                                 updatePosition(latLng);
+                                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                                 googleMap.addMarker(Options);
+                                 db.generateDirections(currLoc,context);
+                                 MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+                                 latLngList.add(latLng);
+                                 Marker marker = gMap.addMarker(markerOptions);
+                                 markerList.add(marker);
+                                 drawLines();
+                                 //testDraw();
+                                 //generateMarkers();
+                             }
+                         });
+                }
+
+            }
+        });
+
+    }
     private void updatePosition(LatLng latLng)
     {
         MarkerOptions markerOptions = new MarkerOptions().position(latLng);
@@ -124,37 +157,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         polyline.setColor(Color.rgb(red,green,blue));
     }
-    private void getCurrentLocation(){
-        @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if(location != null){
-                         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-                             @Override
-                             public void onMapReady(@NonNull GoogleMap googleMap) {
-                                 LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-
-                                 MarkerOptions Options = new MarkerOptions().position(latLng).title("Your position");
-                                 currLoc = latLng;
-                                 updatePosition(latLng);
-                                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-                                 googleMap.addMarker(Options);
-                                 db.generateDirections(currLoc,context);
-                                 MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-                                 latLngList.add(latLng);
-                                 Marker marker = gMap.addMarker(markerOptions);
-                                 markerList.add(marker);
-                                 //drawLines();
-                                 testDraw();
-                                 generateMarkers();
-                             }
-                         });
-                }
-
-            }
-        });
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -193,11 +195,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     public void drawLines()
     {
-        for(String val : db.directions)
+        for(String val : db.nodes)
         {
             Log.d("Directions String", val);
             AnimalNode node = db.animalNodes.get(val);
-            try {
+            if(node.lat!= null)
+            {
+
                 LatLng latLng = new LatLng(node.lat,node.lng);
                 MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(node.name);
                 //Create Marker
@@ -212,8 +216,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 polyline = gMap.addPolyline(polylineOptions);
 
                 polyline.setColor(Color.rgb(red,green,blue));
-            } catch (Exception e) {
-                System.out.println("Oops!");
             }
             Log.d("Markers",latLngList.toString());
             Log.d("LatLngList",latLngList.toString());
@@ -227,10 +229,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     {
         for(String x: db.animalNodes.keySet())
         {
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng));
+            Log.d("Node String", db.animalNodes.get(x).toString());
+            if(db.animalNodes.get(x).lat!=null)
+            {
+                MarkerOptions markerOptions = new MarkerOptions()
+                    .position(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng))
+                        .title(db.animalNodes.get(x).name);
+                Marker marker = gMap.addMarker(markerOptions);
+                latLngList.add(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng));
+                markerList.add(marker);
+                if(polyline != null) polyline.remove();
+                //Create PolylineOptions
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .addAll(latLngList).clickable(true);
+                polyline = gMap.addPolyline(polylineOptions);
+
+                polyline.setColor(Color.rgb(red,green,blue));
+            }
+
             //Create Marker
-            Marker marker = gMap.addMarker(markerOptions);
+            //
         }
     }
     @Override

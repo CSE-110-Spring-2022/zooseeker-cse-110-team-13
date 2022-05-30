@@ -21,7 +21,7 @@ import java.util.Queue;
 
 public class DirectionsBuilder {
     public List<Pair<String,LatLng>> positions; //We will have a list of Names an LatLng
-    List<String> directions;
+    List<String> nodes;
     Map<String, AnimalNode> animalNodes;
     private double distance(LatLng l1, LatLng l2) {
         double theta = l1.longitude - l2.longitude;
@@ -45,6 +45,7 @@ public class DirectionsBuilder {
     }
     public void generateDirections(LatLng start,Context op)
     {
+        List<String> directions;
         PriorityQueue<AnimalNode> selectedAnimals;
         Queue<AnimalNode> visitedAnimals;
         Map<String, EdgeNameItem> edgeNodes;
@@ -100,7 +101,7 @@ public class DirectionsBuilder {
         }
         Log.d("Animal Queue Sorted", selectedAnimals.toString());
 
-        //Getting directions to first animal   TODO replace this with method from Directions.java
+        //Getting directions to first animal
         if (!selectedAnimals.isEmpty()) {
             AnimalNode currAnimal = selectedAnimals.poll();
             //setting Animal name text view
@@ -112,7 +113,7 @@ public class DirectionsBuilder {
                 pathFound = Directions.computeDirections(currentLocation, currAnimal.group_id, ZooGraphConstruct);
             }
 
-            List<String> nodes = pathFound.getVertexList();
+            nodes = pathFound.getVertexList();
             Log.d("nodes: ", nodes.toString());
 
             int i = 1;
@@ -125,16 +126,6 @@ public class DirectionsBuilder {
                 i++;
             }
 
-            //TODO change this to just get the user's current GPS location
-            if(currAnimal.group_id == null) {
-                currentLocation = currAnimal.id;
-            } else {
-                currentLocation = currAnimal.group_id;
-            }
-            Log.d("Arriving at:", currAnimal.id);
-
-        } else {
-            noSelectedAnimals = true;
         }
     }
 }
