@@ -72,13 +72,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void OnMapClicked(View view)
+    {
+        Intent intent = new Intent(this,MapActivity.class);
+        startActivity(intent);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //code
         saveProfile();
     }
-
     public void loadProfile() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         //code
