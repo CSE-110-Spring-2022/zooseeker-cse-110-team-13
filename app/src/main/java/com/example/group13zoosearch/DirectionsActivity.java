@@ -117,6 +117,9 @@ public class DirectionsActivity extends AppCompatActivity {
             }
             Log.d("Arriving at:", currAnimal.id);
             currentLocationName = currAnimal.id;
+            if(selectedAnimals.isEmpty()){
+                visitedAnimals.push(animalNodes.get(currentLocationName));
+            }
 
         } else {
             noSelectedAnimals = true;
@@ -192,7 +195,7 @@ public class DirectionsActivity extends AppCompatActivity {
                                         Integer.toString(i), animalNodes.get(nodes.get(i)).name);
                 directions.add(temp.toString());
                 Log.d("Directions", temp.toString());
-                Log.d("List", directions.toString());
+                //Log.d("List", directions.toString());
                 i++;
             }
 
@@ -205,6 +208,9 @@ public class DirectionsActivity extends AppCompatActivity {
 
             Log.d("Arriving at:", currAnimal.id);
             currentLocationName = currAnimal.id;
+            if(selectedAnimals.isEmpty()){
+                visitedAnimals.push(animalNodes.get(currentLocationName));
+            }
             listAdapter.setDirectionItems(directions);
         } else {
             finish();
@@ -265,7 +271,7 @@ public class DirectionsActivity extends AppCompatActivity {
                         Integer.toString(i), animalNodes.get(nodes.get(i)).name);
                 directions.add(temp.toString());
                 Log.d("Directions", temp.toString());
-                Log.d("List", directions.toString());
+                //Log.d("List", directions.toString());
                 i++;
             }
 
@@ -341,7 +347,7 @@ public class DirectionsActivity extends AppCompatActivity {
                         Integer.toString(i), animalNodes.get(nodes.get(i)).name);
                 directions.add(temp.toString());
                 Log.d("Directions", temp.toString());
-                Log.d("List", directions.toString());
+                //Log.d("List", directions.toString());
                 i++;
             }
 
