@@ -22,7 +22,10 @@ import java.util.Queue;
 public class DirectionsBuilder {
     public List<Pair<String,LatLng>> positions; //We will have a list of Names an LatLng
     List<String> nodes;
+    AnimalList anList;
+    PriorityQueue<AnimalNode> selectedAnimals;
     Map<String, AnimalNode> animalNodes;
+
     private double distance(LatLng l1, LatLng l2) {
         double theta = l1.longitude - l2.longitude;
         double dist = Math.sin(deg2rad(l1.latitude))
@@ -43,6 +46,39 @@ public class DirectionsBuilder {
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+
+    //update location when start and when position moves.
+    public void updateLocations(LatLng currentPosition, Context op)
+    {
+        if(selectedAnimals.isEmpty())return;
+        if(nodes.isEmpty()) return;
+        for(int i = 0; i < nodes.size();i++)
+        {
+            AnimalNode n = animalNodes.get(nodes.get(i));
+            if(n.lng!= null)
+            {
+                LatLng pos = new LatLng(n.lat,n.lng);
+                if(distance(currentPosition,pos)<=100)
+                {
+                    Log.d("Removing node due to closeness",n.name);
+                    int j = 0;
+                    while(j<=i)
+                    {
+                        nodes.remove(j);
+                        if(nodes.isEmpty())
+                        {
+                            generateDirections(currentPosition,op);
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    //call when on start and when the plan has first been calculated/modified.
     public void generateDirections(LatLng start,Context op)
     {
         List<String> directions;
@@ -69,7 +105,7 @@ public class DirectionsBuilder {
         Log.d("animalGraph", ZooGraphConstruct.toString());
 
         //Fetching selected animals
-        AnimalList anList = new AnimalList(op, "exhibit_info.json","trail_info.json","zoo_graph.json");
+        anList = new AnimalList(op, "exhibit_info.json","trail_info.json","zoo_graph.json");
         selectedAnimals = anList.generatePriorityQueue();
         Log.d("Animal Queue created", selectedAnimals.toString());
 

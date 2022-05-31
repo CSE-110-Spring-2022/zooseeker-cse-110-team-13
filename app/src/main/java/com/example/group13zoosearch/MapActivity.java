@@ -120,10 +120,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                  googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                                  googleMap.addMarker(Options);
                                  db.generateDirections(currLoc,context);
-                                 MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-                                 latLngList.add(latLng);
-                                 Marker marker = gMap.addMarker(markerOptions);
-                                 markerList.add(marker);
+                                 //MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+                                 //latLngList.add(latLng);
+                                 //Marker marker = gMap.addMarker(markerOptions);
+                                 //markerList.add(marker);
                                  drawLines();
                              }
                          });
@@ -187,6 +187,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     {
         Log.d("ASERS","SPAGHETTI");
         clearPath();
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(currLoc).title("You");
+        Marker marker = gMap.addMarker(markerOptions);
+        latLngList.add((currLoc));
+        markerList.add(marker);
         for(String val : db.nodes)
         {
             Log.d("Directions String", val);
@@ -195,9 +200,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             {
 
                 LatLng latLng = new LatLng(node.lat,node.lng);
-                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(node.name);
+                markerOptions = new MarkerOptions().position(latLng).title(node.name);
                 //Create Marker
-                Marker marker = gMap.addMarker(markerOptions);
+                marker = gMap.addMarker(markerOptions);
                 //Add Latlng and Marker
                 latLngList.add(latLng);
                 markerList.add(marker);
@@ -220,15 +225,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //Draws all locations on the map
     public void generateMarkers()
     {
+        clearPath();
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(currLoc).title("You");
+        Marker marker = gMap.addMarker(markerOptions);
+        latLngList.add((currLoc));
+        markerList.add(marker);
         for(String x: db.animalNodes.keySet())
         {
             Log.d("Node String", db.animalNodes.get(x).toString());
             if(db.animalNodes.get(x).lat!=null)
             {
-                MarkerOptions markerOptions = new MarkerOptions()
+                markerOptions = new MarkerOptions()
                     .position(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng))
                         .title(db.animalNodes.get(x).name);
-                Marker marker = gMap.addMarker(markerOptions);
+                marker = gMap.addMarker(markerOptions);
                 latLngList.add(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng));
                 markerList.add(marker);
                 if(polyline != null) polyline.remove();
@@ -247,26 +258,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
-//        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
-//           @Override
-//            public void onMapClick(LatLng latLng)
-//           {
-//               //Create MarkerOptions
-//               MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-//               //Create Marker
-//               Marker marker = gMap.addMarker(markerOptions);
-//               //Add Latlng and Marker
-//               latLngList.add(latLng);
-//               markerList.add(marker);
-//               if(polyline != null) polyline.remove();
-//               //Create PolylineOptions
-//               PolylineOptions polylineOptions = new PolylineOptions()
-//                       .addAll(latLngList).clickable(true);
-//               polyline = gMap.addPolyline(polylineOptions);
-//
-//               polyline.setColor(Color.rgb(red,green,blue));
-//           }
-//        });
+        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+           @Override
+            public void onMapClick(LatLng latLng)
+           {
+               //Create MarkerOptions
+               currLoc = latLng;
+               db.generateDirections(latLng,context);
+               drawLines();
+               //db.updateLocations(latLng,context);
+           }
+        });
 
     }
 
@@ -275,7 +277,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onLocationChanged(@NonNull Location location) {
         Location cloc = location;
         LatLng cll = new LatLng(cloc.getLatitude(),cloc.getLongitude());
-        db.generateDirections(cll,this);
+        //db.generateDirections(cll,this);
+        db.updateLocations(cll,this);
         // use latitude and longitude given by
         // location.getLatitude(), location.getLongitude()
         // for updated location marker

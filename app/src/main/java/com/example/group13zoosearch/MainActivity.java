@@ -136,7 +136,17 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Saved Selected Exhibits List to Shared preferences. ", Toast.LENGTH_SHORT).show();
     }
-
+    public void clearExhibits(View view) {
+        Gson gson = new Gson();
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preference",MODE_PRIVATE);
+        sharedPreferences.edit().clear().commit();
+        String json = sharedPreferences.getString("exhibits list", null);
+        selectedAnimals.clear();
+        recyclerView = findViewById(R.id.animal_node_items);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(animalAdapter);
+        Toast.makeText(this, "Cleared Selected Exhibits List. ", Toast.LENGTH_SHORT).show();
+    }
     public void OnRoutePlanClicked(View view) {
         Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
