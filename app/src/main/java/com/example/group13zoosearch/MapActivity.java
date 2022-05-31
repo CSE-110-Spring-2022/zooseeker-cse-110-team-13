@@ -56,20 +56,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     FusedLocationProviderClient client;
     int red = 0, green = 0, blue = 0;
 
+    //Runs Once the first time the activity is called and created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        //We will intialize the values and our Directions Builder to receive our directions needed
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
         db = new DirectionsBuilder();
 
-
+        //Our support map fragment is stored in a variable here
         supportMapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.google_map);
         supportMapFragment.getMapAsync(this);
+
+        //client will store the services to receive our current location
         client = LocationServices.getFusedLocationProviderClient(this);
+
+        //We check permissions to access our current location for our activity
+        //We will then run our functions to generate the routes
         if (ActivityCompat.checkSelfPermission(MapActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                clearPath();
                  getCurrentLocation();
 
 
@@ -87,6 +92,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onResume();
         if (ActivityCompat.checkSelfPermission(MapActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //We will recalculate the location once we resume the activity
             clearPath();
             getCurrentLocation();
 
@@ -105,7 +111,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                          supportMapFragment.getMapAsync(new OnMapReadyCallback() {
                              @Override
                              public void onMapReady(@NonNull GoogleMap googleMap) {
-                                 clearPath();
+
                                  LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
 
                                  MarkerOptions Options = new MarkerOptions().position(latLng).title("Your position");
@@ -119,8 +125,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                  Marker marker = gMap.addMarker(markerOptions);
                                  markerList.add(marker);
                                  drawLines();
-                                 //testDraw();
-                                 //generateMarkers();
                              }
                          });
                 }
@@ -158,22 +162,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         polyline.setColor(Color.rgb(red,green,blue));
     }
-    private void drawPosition(LatLng latLng)
-    {
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-        //Create Marker
-        Marker marker = gMap.addMarker(markerOptions);
-        //Add Latlng and Marker
-        latLngList.add(latLng);
-        markerList.add(marker);
-        if(polyline != null) polyline.remove();
-        //Create PolylineOptions
-        PolylineOptions polylineOptions = new PolylineOptions()
-                .addAll(latLngList).clickable(true);
-        polyline = gMap.addPolyline(polylineOptions);
 
-        polyline.setColor(Color.rgb(red,green,blue));
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -196,6 +185,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void drawLines()
     {
+        Log.d("ASERS","SPAGHETTI");
+        clearPath();
         for(String val : db.nodes)
         {
             Log.d("Directions String", val);
@@ -226,6 +217,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
     }
+    //Draws all locations on the map
     public void generateMarkers()
     {
         for(String x: db.animalNodes.keySet())
@@ -255,26 +247,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
-        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
-           @Override
-            public void onMapClick(LatLng latLng)
-           {
-               //Create MarkerOptions
-               MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-               //Create Marker
-               Marker marker = gMap.addMarker(markerOptions);
-               //Add Latlng and Marker
-               latLngList.add(latLng);
-               markerList.add(marker);
-               if(polyline != null) polyline.remove();
-               //Create PolylineOptions
-               PolylineOptions polylineOptions = new PolylineOptions()
-                       .addAll(latLngList).clickable(true);
-               polyline = gMap.addPolyline(polylineOptions);
-
-               polyline.setColor(Color.rgb(red,green,blue));
-           }
-        });
+//        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+//           @Override
+//            public void onMapClick(LatLng latLng)
+//           {
+//               //Create MarkerOptions
+//               MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+//               //Create Marker
+//               Marker marker = gMap.addMarker(markerOptions);
+//               //Add Latlng and Marker
+//               latLngList.add(latLng);
+//               markerList.add(marker);
+//               if(polyline != null) polyline.remove();
+//               //Create PolylineOptions
+//               PolylineOptions polylineOptions = new PolylineOptions()
+//                       .addAll(latLngList).clickable(true);
+//               polyline = gMap.addPolyline(polylineOptions);
+//
+//               polyline.setColor(Color.rgb(red,green,blue));
+//           }
+//        });
 
     }
 
@@ -296,8 +288,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Marker ham = gMap.addMarker(new MarkerOptions().position(loc).title("This is Me"));
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
+
     }
     //Button Click Functions
+    public void calibrateBtn(View view){gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currLoc,10));}
     public void returnToHome(View view) {
         finish();
     }

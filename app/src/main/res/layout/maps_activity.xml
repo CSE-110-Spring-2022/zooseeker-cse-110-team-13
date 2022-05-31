@@ -9,9 +9,18 @@
     <Button
         android:layout_width="126dp"
         android:layout_height="72dp"
+        android:id="@+id/center_btn"
         android:layout_centerHorizontal="true"
         android:autoSizeTextType="uniform"
         android:text="Center" />
+
+    <Button
+        android:id="@+id/calibrate_btn"
+        android:layout_width="126dp"
+        android:layout_height="72dp"
+        android:autoSizeTextType="uniform"
+        android:text="Calibrate"
+        android:onClick="calibrateBtn"/>
 
     <fragment
         android:id="@+id/google_map"
