@@ -3,6 +3,7 @@ package com.example.group13zoosearch;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -68,7 +69,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         client = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(MapActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
+                clearPath();
+                 getCurrentLocation();
 
 
         }else{
@@ -79,7 +81,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     }
+    @Override
+    public void onResume() {
 
+        super.onResume();
+        if (ActivityCompat.checkSelfPermission(MapActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            clearPath();
+            getCurrentLocation();
+
+
+        }else{
+            ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        }
+
+    }
     private void getCurrentLocation(){
         @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -89,6 +105,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                          supportMapFragment.getMapAsync(new OnMapReadyCallback() {
                              @Override
                              public void onMapReady(@NonNull GoogleMap googleMap) {
+                                 clearPath();
                                  LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
 
                                  MarkerOptions Options = new MarkerOptions().position(latLng).title("Your position");
@@ -168,6 +185,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    //Clears marker and paths before each calculation use when needed
     public void clearPath()
     {
         if(polyline != null) polyline.remove();
@@ -175,24 +193,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         latLngList.clear();
         markerList.clear();
     }
-    //Test draws line between two points
-    public void testDraw()
-    {
-        LatLng ln1 = new LatLng(0,0);
-        LatLng ln2 = new LatLng( 0.01,0.01);
-        List<LatLng> lnl = new ArrayList<LatLng>();
-        List<Marker> ml = new ArrayList<>();
-        MarkerOptions markerOptions = new MarkerOptions().position(ln1).title("First");
-        MarkerOptions markerOptions1 = new MarkerOptions().position(ln2).title("Second");
-        Marker marker = gMap.addMarker(markerOptions);
-        Marker marker2 = gMap.addMarker(markerOptions1);
-        if(polyline != null) polyline.remove();
-        PolylineOptions polylineOptions = new PolylineOptions()
-                .addAll(lnl).clickable(true);
-        polyline = gMap.addPolyline(polylineOptions);
-        polyline.setColor(Color.rgb(0,0,0));
 
-    }
     public void drawLines()
     {
         for(String val : db.nodes)
@@ -295,5 +296,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Marker ham = gMap.addMarker(new MarkerOptions().position(loc).title("This is Me"));
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
+    }
+    //Button Click Functions
+    public void returnToHome(View view) {
+        finish();
+    }
+    public void center(View view){}
+    public void toDirections(View view) {
+        Intent intent = new Intent(this, DirectionsActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

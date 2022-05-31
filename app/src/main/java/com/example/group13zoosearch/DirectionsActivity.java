@@ -373,7 +373,7 @@ public class DirectionsActivity extends AppCompatActivity {
 
     public void returnToRoutePlan(View view) {
         //AnimalList.updateSelected_animal_nodes(selectedAnimals);
-        Intent intent = new Intent(this, RoutePlanActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
         finish();
     }

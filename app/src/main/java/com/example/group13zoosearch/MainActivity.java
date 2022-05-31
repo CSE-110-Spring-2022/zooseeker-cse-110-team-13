@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //code
-        saveProfile();
+        //saveProfile();
     }
     public void loadProfile() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void OnRoutePlanClicked(View view) {
-        Intent intent = new Intent(this, RoutePlanActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
 }

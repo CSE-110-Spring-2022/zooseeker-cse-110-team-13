@@ -28,7 +28,8 @@
             android:exported="false" />
         <activity
             android:name=".SearchActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".MapActivity"
             android:exported="false" />
