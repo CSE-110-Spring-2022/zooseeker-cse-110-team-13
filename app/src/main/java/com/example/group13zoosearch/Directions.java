@@ -80,7 +80,8 @@ public class Directions {
         for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
             temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
                     Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name,null);
-            directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
+            String newtemp = temp.toString().replace("\n","");
+            directions.add(newtemp);    //not the most elegant way to do this but it works ;-;
             Log.d("directions", temp.toString());
             i++;
         }
@@ -135,7 +136,7 @@ public class Directions {
             }
             else{
 
-                message = Integer.toString(i)+ ". Head " + total_distance + "ft on "+ temp.getPreviousNodeItem().getRoad() + " towards " + temp.getPreviousNodeItem().getNextNode() + "\n";
+                message = Integer.toString(i)+ ". Head " + total_distance + "ft on "+ temp.getPreviousNodeItem().getRoad() + " towards " + temp.getPreviousNodeItem().getNextNode();
                 total_distance = temp.getDistance();
                 directions.add(message);
                 Log.d("directions",message);
@@ -148,7 +149,7 @@ public class Directions {
         if(temp==null){
             Log.d("null error","");
         }else{
-        message = Integer.toString(i)+ ". Head " + total_distance + "ft on "+ temp.getRoad() + " towards " + temp.getNextNode() + "\n";
+        message = Integer.toString(i)+ ". Head " + total_distance + "ft on "+ temp.getRoad() + " towards " + temp.getNextNode();
         directions.add(message);
         Log.d("directions",message);}
         return directions;
