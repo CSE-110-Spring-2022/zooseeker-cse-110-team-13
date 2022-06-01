@@ -46,6 +46,7 @@ import java.util.Queue;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationSource.OnLocationChangedListener {
     GoogleMap gMap;
+
     LatLng currLoc;
     Polyline polyline = null;
     Context context = this;
@@ -192,6 +193,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Marker marker = gMap.addMarker(markerOptions);
         latLngList.add((currLoc));
         markerList.add(marker);
+        db.nodes.remove(0);
         for(String val : db.nodes)
         {
             Log.d("Directions String", val);

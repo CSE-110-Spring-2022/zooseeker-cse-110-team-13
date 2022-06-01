@@ -145,6 +145,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.animal_node_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(animalAdapter);
+        AnimalList.selected_exhibits.clear();
+        selectedAnimals = info.generatePriorityQueue();
+        ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>(selectedAnimals);
+        animalAdapter.setAnimalNodeList(temp);
         Toast.makeText(this, "Cleared Selected Exhibits List. ", Toast.LENGTH_SHORT).show();
     }
     public void OnRoutePlanClicked(View view) {
