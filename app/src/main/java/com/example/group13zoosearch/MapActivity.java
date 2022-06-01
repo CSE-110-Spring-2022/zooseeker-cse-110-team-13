@@ -192,6 +192,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Marker marker = gMap.addMarker(markerOptions);
         latLngList.add((currLoc));
         markerList.add(marker);
+        if(db.nodes.size()>1)
+        {
+            db.nodes.remove(0);
+        }
+
         for(String val : db.nodes)
         {
             Log.d("Directions String", val);
