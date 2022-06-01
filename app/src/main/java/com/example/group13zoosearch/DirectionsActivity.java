@@ -19,21 +19,20 @@ import java.util.Stack;
 
 public class DirectionsActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
+    private ListAdapter listAdapter;
+    private TextView noAnimalsSelected;
+    private TextView headingToText;
+    private TextView currentAnimalText;
+
     private Map<String, AnimalNode> animalNodes;
     private Map<String, EdgeNameItem> edgeNodes;
     private Graph<String, IdentifiedWeightedEdge> ZooGraphConstruct;
+
     private List<String> directions;
     private String currentLocation;
     private String previousLocation;
-    private String currentLocationName;
-    private TextView animalToVisit;
-    TextView noAnimalsSelected;
-    TextView headingToText;
-    TextView currentAnimalText;
     private boolean detailed=false;
     private boolean noSelectedAnimals;
-    ListAdapter listAdapter;
-
 
     //New Directions objects :)
     private ArrayList<AnimalNode> animalRoute;
@@ -117,7 +116,6 @@ public class DirectionsActivity extends AppCompatActivity {
                 currentLocation = currAnimal.group_id;
             }
             Log.d("Arriving at:", currAnimal.id);
-            currentLocationName = currAnimal.id;
 
         } else {
             noSelectedAnimals = true;
@@ -141,19 +139,19 @@ public class DirectionsActivity extends AppCompatActivity {
         if(currIndex>= animalRoute.size()){
             noAnimalsSelected.setText("All animal exhibits have been visited!");
             noAnimalsSelected.setVisibility(View.VISIBLE);
-            headingToText.setVisibility(View.INVISIBLE);
-            currentAnimalText.setVisibility(View.INVISIBLE);
+            headingToText.setText("Currently at:");
+            currentAnimalText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
             Log.d("CurrIndex:", String.valueOf(currIndex));
             return;
         } else {
             noAnimalsSelected.setVisibility(View.INVISIBLE);
-            headingToText.setVisibility(View.VISIBLE);
+            headingToText.setText("Heading to:");
             currentAnimalText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
         }
 
-        if ((currIndex< animalRoute.size() && currIndex < animalRoute.size())) {
+        if (currIndex< animalRoute.size()) {
             while(animalRoute.get(currIndex).visited){
                 currIndex++;
             }
@@ -183,7 +181,6 @@ public class DirectionsActivity extends AppCompatActivity {
             }
             Log.d("Arriving at:", currAnimal.id);
             Log.d("CurrIndex:", String.valueOf(currIndex));
-            currentLocationName = currAnimal.id;
 
         } else {
             noSelectedAnimals = true;
@@ -198,16 +195,16 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void previousDirections(View view) {
+        if (noSelectedAnimals || animalRoute.size() == 0) return;
         previousLocation = currentLocation;
-        if (noSelectedAnimals) return;
 
         directions.clear();
 
         if(visitedAnimals.empty() || currIndex <= -1){   
-            noAnimalsSelected.setText("No previous Exhibits");
+            noAnimalsSelected.setText("No previous exhibits");
             noAnimalsSelected.setVisibility(View.VISIBLE);
-            headingToText.setVisibility(View.INVISIBLE);
-            currentAnimalText.setVisibility(View.INVISIBLE);
+            headingToText.setText("Currently at:");
+            currentAnimalText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
             if(currIndex > -1){
                 currIndex--;
@@ -216,7 +213,7 @@ public class DirectionsActivity extends AppCompatActivity {
             return;
         } else {
             noAnimalsSelected.setVisibility(View.INVISIBLE);
-            headingToText.setVisibility(View.VISIBLE);
+            headingToText.setText("Heading to:");
             currentAnimalText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
         }
@@ -247,7 +244,6 @@ public class DirectionsActivity extends AppCompatActivity {
 
             Log.d("Arriving at:", currAnimal.id);
             Log.d("CurrIndex:", String.valueOf(currIndex));
-            currentLocationName = currAnimal.id;
             listAdapter.setDirectionItems(directions);
         } else {
             finish();
@@ -256,9 +252,26 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void skipDirections(View view) {
-        previousLocation = currentLocation;
-       //Basically the same as next btn except does not add animal to previous animals list
+        //Basically the same as next btn except does not add animal to previous animals list
+        //NOTE:this will be one off, need to grab current code for previousAnimal
         if (noSelectedAnimals) return;
+        previousLocation = currentLocation;
+
+        //take sublist from current index to end remove the one we're skipping
+        //rerun calculations and add to the list before
+        List<AnimalNode> temp = animalRoute.subList(currIndex, animalRoute.size());
+        ArrayList<AnimalNode> temp2 = new ArrayList<AnimalNode>(temp);
+        animalRoute.removeAll(temp);
+        temp2.remove(0);
+        temp2 = Directions.computeRoute(currentLocation,temp2, ZooGraphConstruct);
+        for(AnimalNode an : temp2){
+            animalRoute.add(an);
+        }
+        Log.d("Replanned Route", animalRoute.toString());
+
+        if(visitedAnimals.size() == 1){
+            visitedAnimals.pop();
+        }
 
         directions.clear();
 
@@ -266,22 +279,26 @@ public class DirectionsActivity extends AppCompatActivity {
             currIndex++;
         }
 
-        if(currIndex>= animalRoute.size()){
-            noAnimalsSelected.setText("All animal exhibits have been visited!");
+        if(currIndex>= animalRoute.size() || currIndex <= -1){
+            noAnimalsSelected.setText("All animal exhibits have been visited or skipped!");
             noAnimalsSelected.setVisibility(View.VISIBLE);
-            headingToText.setVisibility(View.INVISIBLE);
-            currentAnimalText.setVisibility(View.INVISIBLE);
+            headingToText.setText("Currently at:");
+            currentAnimalText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
+            if(currIndex > -1){
+                currIndex--;
+            }
+            Log.d("CurrIndex:", String.valueOf(currIndex));
             return;
         } else {
             noAnimalsSelected.setVisibility(View.INVISIBLE);
-            headingToText.setVisibility(View.VISIBLE);
+            headingToText.setText("Heading to:");
             currentAnimalText.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
         }
 
-        if ((currIndex< animalRoute.size() && currIndex < animalRoute.size())) {
-            while(animalRoute.get(currIndex).visited){
+        if (currIndex< animalRoute.size()) {
+            while(currIndex < animalRoute.size() && animalRoute.get(currIndex).visited){
                 currIndex++;
             }
             AnimalNode currAnimal = animalRoute.get(currIndex);
@@ -298,15 +315,7 @@ public class DirectionsActivity extends AppCompatActivity {
             else{
                 directions = Directions.getDirectionsListBrief(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
             }
-
-            //TODO change this to just get the user's current GPS location
-            if(currAnimal.group_id == null) {
-                currentLocation = currAnimal.id;
-            } else {
-                currentLocation = currAnimal.group_id;
-            }
             Log.d("Arriving at:", currAnimal.id);
-            currentLocationName = currAnimal.id;
 
         } else {
             noSelectedAnimals = true;
