@@ -2,6 +2,7 @@ package com.example.group13zoosearch;
 
 import android.content.Context;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -26,9 +27,11 @@ public class AnimalNode {
     public String name;
     public String group_id;
     public List<String> tags;
-    public double lat; //may need to be changed to something else
-    public double lng;
-
+//    public double lat; //may need to be changed to something else
+//    public double lng;
+    public LatLng latLng;
+    public Double lat;
+    public Double lng;
     public boolean favorited;
     public double distance_from_location;
     public double ETA_time; //time in minutes
@@ -52,8 +55,8 @@ public class AnimalNode {
         return "AnimalNode{" +
                 "id='" + id + '\'' +
                 "groupID=" + group_id + '\'' +
-//                "lat=" + lat + '\'' +
-//                "lng=" + lng + '\'' +
+               "lat=" + lat + '\'' +
+                "lng=" + lng + '\'' +
                 ", distance=" + distance_from_location +
                 "}\n";
     }

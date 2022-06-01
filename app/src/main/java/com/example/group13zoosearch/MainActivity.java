@@ -89,6 +89,23 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void OnMapClicked(View view)
+    {
+        Intent intent = new Intent(this,MapActivity.class);
+        startActivity(intent);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //code
+        //saveProfile();
+    }
+    public void loadProfile() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        //code
+//        SharedPreferences.Editor editor = preferences.edit();
+        preferences.getStringSet("key", test);
+    }
 
     /**
      * using json and gson in sharedpreference to save and load
@@ -121,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void OnRoutePlanClicked(View view) {
-        Intent intent = new Intent(this, RoutePlanActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
 }
