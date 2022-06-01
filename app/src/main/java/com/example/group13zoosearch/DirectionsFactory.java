@@ -31,7 +31,7 @@ public class DirectionsFactory {
     public static String currentLocationName;
 
 
-    private static double distance(LatLng l1, LatLng l2) {
+    public static double distance(LatLng l1, LatLng l2) {
         double theta = l1.longitude - l2.longitude;
         double dist = Math.sin(deg2rad(l1.latitude))
                 * Math.sin(deg2rad(l2.latitude))
@@ -140,7 +140,7 @@ public class DirectionsFactory {
         Log.d("Current_Location",currClosest.id);
         currentLocation = currClosest.id;
         previousLocation = currentLocation;
-        animalRoute = anList.generateArrayList2(currentLocation);
+        animalRoute = anList.generateArrayList(currentLocation);
 
         animalRoute = Directions.computeRoute(currentLocation,animalRoute, ZooGraphConstruct);
 
