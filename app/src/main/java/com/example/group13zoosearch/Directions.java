@@ -121,8 +121,10 @@ public class Directions {
 
             if(temp.getPreviousNodeItem()==null){
                 total_distance+=temp.getDistance();
-                Log.d("temp_name",temp.getRoad());
-                Log.d("pre_name_null",temp.getPreviousNodeItem().getRoad());
+                //Log.d("temp_name",temp.getRoad());
+                //Log.d("pre_name_null",temp.getPreviousNodeItem().getRoad());
+                //Log.d("pre_name_null",temp.getPreviousNodeItem().getNextNode());
+                //Log.d("pre_name_null",temp.getPreviousNodeItem().toString());
                 continue;
             }
             Log.d("temp_Name",temp.getRoad());
@@ -132,17 +134,17 @@ public class Directions {
                 Log.d("haha",Double. toString(total_distance));
             }
             else{
-                message = temp.getPreviousNodeItem().getCount()+ ". Head " + total_distance + "ft on "+ temp.getPreviousNodeItem().getRoad() + " towards " + temp.getPreviousNodeItem().getNextNode() + "\n";
-                total_distance = 0;
+                message = Integer.toString(i)+ ". Head " + total_distance + "ft on "+ temp.getPreviousNodeItem().getRoad() + " towards " + temp.getPreviousNodeItem().getNextNode() + "\n";
+                total_distance = temp.getDistance();
                 directions.add(message);
                 Log.d("directions",message);
+                i++;
             }
 
             //directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
             //Log.d("directions", temp.toString());
-            i++;
         }
-        message = temp.getPreviousNodeItem().getCount()+ ". Head " + total_distance + "ft on "+ temp.getPreviousNodeItem().getRoad() + " towards " + temp.getPreviousNodeItem().getNextNode() + "\n";
+        message = Integer.toString(i)+ ". Head " + total_distance + "ft on "+ temp.getRoad() + " towards " + temp.getNextNode() + "\n";
         directions.add(message);
         Log.d("directions",message);
         return directions;

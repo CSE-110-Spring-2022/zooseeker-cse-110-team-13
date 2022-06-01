@@ -1,9 +1,15 @@
 package com.example.group13zoosearch;public class DirectionStepItem {
-    public static double distance;
-    public static String road;
-    public static String count;
-    public static String nextNode;
-    public static DirectionStepItem previousNodeItem;
+//    public static double distance;
+//    public static String road;
+//    public static String count;
+//    public static String nextNode;
+//    public static DirectionStepItem previousNodeItem;
+
+    public  double distance;
+    public  String road;
+    public  String count;
+    public  String nextNode;
+    public  DirectionStepItem previousNodeItem;
 
     DirectionStepItem(double distance, String road, String count, String nextNode, DirectionStepItem previousNodeItem){
         this.distance = distance;
@@ -13,19 +19,33 @@ package com.example.group13zoosearch;public class DirectionStepItem {
         this.previousNodeItem = previousNodeItem;
     }
 
-    public static double getDistance() {
+//    public static double getDistance() {
+//        return distance;
+//    }
+//
+//    public static String getRoad() {
+//        return road;
+//    }
+//
+//    public static String getCount() { return count;}
+//
+//    public static String getNextNode() { return nextNode; }
+//
+//    public static DirectionStepItem getPreviousNodeItem() {return previousNodeItem;}
+
+    public double getDistance() {
         return distance;
     }
 
-    public static String getRoad() {
+    public String getRoad() {
         return road;
     }
 
-    public static String getCount() { return count;}
+    public String getCount() { return count;}
 
-    public static String getNextNode() { return nextNode; }
+    public String getNextNode() { return nextNode; }
 
-    public static DirectionStepItem getPreviousNodeItem() {return previousNodeItem;}
+    public DirectionStepItem getPreviousNodeItem() {return previousNodeItem;}
 
     @Override
     public String toString() {
