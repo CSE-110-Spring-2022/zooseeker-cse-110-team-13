@@ -74,7 +74,11 @@ public class DirectionsActivity extends AppCompatActivity {
         //Creating graph
         ZooGraphConstruct = Directions.loadZooGraphJSON(this, "zoo_graph.json");
         Log.d("animalGraph", ZooGraphConstruct.toString());
+        getFirstDirection();
 
+    }
+    public void getFirstDirection()
+    {
         //Fetching selected animals and creating route plan
         AnimalList anList = new AnimalList(this, "exhibit_info.json","trail_info.json","zoo_graph.json");
         currentLocation = "entrance_exit_gate";

@@ -1,16 +1,31 @@
 package com.example.group13zoosearch;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -30,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private PriorityQueue<AnimalNode> selectedAnimals;
     AnimalNodeAdapter animalAdapter;
     Button saveBtn;
-
+    FusedLocationProviderClient client;
     //testing some refactoring
     public AnimalList info;         //this animalList will hold all list objects in it
 
@@ -52,7 +67,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(animalAdapter);
         animalNodes = AnimalNode.loadNodeInfoJSON(this, "exhibit_info.json");
+//get location
+        client = LocationServices.getFusedLocationProviderClient(this);
 
+        //We check permissions to access our current location for our activity
+        //We will then run our functions to generate the routes
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getCurrentLocation();
+
+
+        }else{
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
+        }
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +133,24 @@ public class MainActivity extends AppCompatActivity {
         preferences.getStringSet("key", test);
     }
 
+    //Get Current Location Function
+    private void getCurrentLocation(){
+        @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null){
+
+                            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                            DirectionsFactory.currLL = latLng;
+
+
+                }
+
+            }
+        });
+
+    }
     /**
      * using json and gson in sharedpreference to save and load
      *

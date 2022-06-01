@@ -30,7 +30,6 @@ public class AnimalList {
         this.edges = EdgeNameItem.loadNodeInfoJSON(context, edgePath);
         this.zoo_graph_info = Directions.loadZooGraphJSON(context, graphPath);
         this.currentLocation = "entrance_exit_gate";        //TODO MAKE THIS WORK WITH GPS COORDS
-
         //Empty lists for directions later
         this.selected_animal_nodes = new PriorityQueue<AnimalNode>((node1, node2) ->
                 Double.compare(node1.distance_from_location, node2.distance_from_location)
