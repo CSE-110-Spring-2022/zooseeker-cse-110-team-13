@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +22,14 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -33,6 +37,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -43,13 +48,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.regex.Pattern;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationSource.OnLocationChangedListener {
+
+    TextInputEditText latEdit, longEdit;
     GoogleMap gMap;
     LatLng currLoc;
     Polyline polyline = null;
     Context context = this;
-    DirectionsBuilder db;
+    //DirectionsBuilder db;
     SupportMapFragment supportMapFragment;
     List<LatLng> latLngList = new ArrayList<>();
     List<Marker> markerList = new ArrayList<>();
@@ -62,8 +70,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //We will intialize the values and our Directions Builder to receive our directions needed
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
-        db = new DirectionsBuilder();
-
+        //db = new DirectionsBuilder();
+        latEdit = (TextInputEditText)findViewById(R.id.lat_input);
+        longEdit = (TextInputEditText)findViewById(R.id.long_input);
         //Our support map fragment is stored in a variable here
         supportMapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.google_map);
         supportMapFragment.getMapAsync(this);
@@ -119,11 +128,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                  updatePosition(latLng);
                                  googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                                  googleMap.addMarker(Options);
-                                 db.generateDirections(currLoc,context);
-                                 MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-                                 latLngList.add(latLng);
-                                 Marker marker = gMap.addMarker(markerOptions);
-                                 markerList.add(marker);
+
+                                 //MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+                                 //latLngList.add(latLng);
+                                 //Marker marker = gMap.addMarker(markerOptions);
+                                 //markerList.add(marker);
                                  drawLines();
                              }
                          });
@@ -182,22 +191,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         latLngList.clear();
         markerList.clear();
     }
-
     public void drawLines()
     {
-        Log.d("ASERS","SPAGHETTI");
+       ArrayList<AnimalNode> aR = AnimalRoute.animalRoute;
         clearPath();
-        for(String val : db.nodes)
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(currLoc).title("You");
+        Marker marker = gMap.addMarker(markerOptions);
+        latLngList.add((currLoc));
+        markerList.add(marker);
+
+
+        for(AnimalNode val : aR)
         {
-            Log.d("Directions String", val);
-            AnimalNode node = db.animalNodes.get(val);
+            Log.d("Directions dg", val.toString());
+            AnimalNode node = val;
             if(node.lat!= null)
             {
-
+                Log.d("We Made it Here", node.toString());
                 LatLng latLng = new LatLng(node.lat,node.lng);
-                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(node.name);
+                markerOptions = new MarkerOptions().position(latLng).title(node.name);
                 //Create Marker
-                Marker marker = gMap.addMarker(markerOptions);
+                marker = gMap.addMarker(markerOptions);
                 //Add Latlng and Marker
                 latLngList.add(latLng);
                 markerList.add(marker);
@@ -217,56 +232,97 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
     }
+//    public void drawLines()
+//    {
+//        Log.d("ASERS","SPAGHETTI");
+//        clearPath();
+//        MarkerOptions markerOptions = new MarkerOptions()
+//                .position(currLoc).title("You");
+//        Marker marker = gMap.addMarker(markerOptions);
+//        latLngList.add((currLoc));
+//        markerList.add(marker);
+//        if(db.nodes.size()>1)
+//        {
+//            db.nodes.remove(0);
+//        }
+//
+//        for(String val : db.nodes)
+//        {
+//            Log.d("Directions String", val);
+//            AnimalNode node = db.animalNodes.get(val);
+//            if(node.lat!= null)
+//            {
+//
+//                LatLng latLng = new LatLng(node.lat,node.lng);
+//                markerOptions = new MarkerOptions().position(latLng).title(node.name);
+//                //Create Marker
+//                marker = gMap.addMarker(markerOptions);
+//                //Add Latlng and Marker
+//                latLngList.add(latLng);
+//                markerList.add(marker);
+//                if(polyline != null) polyline.remove();
+//                //Create PolylineOptions
+//                PolylineOptions polylineOptions = new PolylineOptions()
+//                        .addAll(latLngList).clickable(true);
+//                polyline = gMap.addPolyline(polylineOptions);
+//
+//                polyline.setColor(Color.rgb(red,green,blue));
+//            }
+//            Log.d("Markers",latLngList.toString());
+//            Log.d("LatLngList",latLngList.toString());
+//
+//
+//
+//        }
+//
+//    }
     //Draws all locations on the map
-    public void generateMarkers()
-    {
-        for(String x: db.animalNodes.keySet())
-        {
-            Log.d("Node String", db.animalNodes.get(x).toString());
-            if(db.animalNodes.get(x).lat!=null)
-            {
-                MarkerOptions markerOptions = new MarkerOptions()
-                    .position(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng))
-                        .title(db.animalNodes.get(x).name);
-                Marker marker = gMap.addMarker(markerOptions);
-                latLngList.add(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng));
-                markerList.add(marker);
-                if(polyline != null) polyline.remove();
-                //Create PolylineOptions
-                PolylineOptions polylineOptions = new PolylineOptions()
-                        .addAll(latLngList).clickable(true);
-                polyline = gMap.addPolyline(polylineOptions);
-
-                polyline.setColor(Color.rgb(red,green,blue));
-            }
+//    public void generateMarkers()
+//    {
+//        clearPath();
+//        MarkerOptions markerOptions = new MarkerOptions()
+//                .position(currLoc).title("You");
+//        Marker marker = gMap.addMarker(markerOptions);
+//        latLngList.add((currLoc));
+//        markerList.add(marker);
+//        for(String x: db.animalNodes.keySet())
+//        {
+//            Log.d("Node String", db.animalNodes.get(x).toString());
+//            if(db.animalNodes.get(x).lat!=null)
+//            {
+//                markerOptions = new MarkerOptions()
+//                    .position(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng))
+//                        .title(db.animalNodes.get(x).name);
+//                marker = gMap.addMarker(markerOptions);
+//                latLngList.add(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng));
+//                markerList.add(marker);
+//                if(polyline != null) polyline.remove();
+//                //Create PolylineOptions
+//                PolylineOptions polylineOptions = new PolylineOptions()
+//                        .addAll(latLngList).clickable(true);
+//                polyline = gMap.addPolyline(polylineOptions);
+//
+//                polyline.setColor(Color.rgb(red,green,blue));
+//            }
 
             //Create Marker
             //
-        }
-    }
+//        }
+//    }
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
-//        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
-//           @Override
-//            public void onMapClick(LatLng latLng)
-//           {
-//               //Create MarkerOptions
-//               MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-//               //Create Marker
-//               Marker marker = gMap.addMarker(markerOptions);
-//               //Add Latlng and Marker
-//               latLngList.add(latLng);
-//               markerList.add(marker);
-//               if(polyline != null) polyline.remove();
-//               //Create PolylineOptions
-//               PolylineOptions polylineOptions = new PolylineOptions()
-//                       .addAll(latLngList).clickable(true);
-//               polyline = gMap.addPolyline(polylineOptions);
-//
-//               polyline.setColor(Color.rgb(red,green,blue));
-//           }
-//        });
+        gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+           @Override
+            public void onMapClick(LatLng latLng)
+           {
+               //Create MarkerOptions
+               currLoc = latLng;
+//               db.generateDirections(latLng,context);
+               drawLines();
+               //db.updateLocations(latLng,context);
+           }
+        });
 
     }
 
@@ -275,7 +331,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onLocationChanged(@NonNull Location location) {
         Location cloc = location;
         LatLng cll = new LatLng(cloc.getLatitude(),cloc.getLongitude());
-        db.generateDirections(cll,this);
+        //db.generateDirections(cll,this);
+//        db.updateLocations(cll,this);
         // use latitude and longitude given by
         // location.getLatitude(), location.getLongitude()
         // for updated location marker
@@ -290,8 +347,45 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
 
     }
+    /*Adapted from https://www.baeldung.com/java-check-string-number used regex to check if a string is numerical or not*/
+    public boolean isNumeric(String strNum) {
+        Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+        if (strNum == null) {
+            return false;
+        }
+        return pattern.matcher(strNum).matches();
+    }
     //Button Click Functions
-    public void calibrateBtn(View view){gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currLoc,10));}
+    public void teleport(View view)
+    {
+        String lat = latEdit.getText().toString().replaceAll("\\s+","") ;
+        String lng = longEdit.getText().toString().replaceAll("\\s+","") ;
+        if(isNumeric(lat) && isNumeric(lng))
+        {
+            LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
+            currLoc = latLng;
+            gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+//            db.generateDirections(latLng,context);
+            drawLines();
+            Toast.makeText(this, "Amenotejikara! Successfully Teleported, Omae Wa Mou Shindeiru ", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this, "Invalid Inputs ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void calibrateBtn(View view){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markerList) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 0;
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        gMap.moveCamera(cameraUpdate);
+        gMap.animateCamera(cameraUpdate);
+
+    }
     public void returnToHome(View view) {
         finish();
     }
