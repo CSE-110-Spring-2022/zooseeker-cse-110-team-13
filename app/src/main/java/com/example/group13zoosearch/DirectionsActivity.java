@@ -50,7 +50,6 @@ public class DirectionsActivity extends AppCompatActivity {
 
         listAdapter = new ListAdapter();
         listAdapter.setHasStableIds(false);
-        currIndex = 0;
 
         //recycler view
         recyclerView = findViewById(R.id.direction_items);
@@ -76,7 +75,9 @@ public class DirectionsActivity extends AppCompatActivity {
 
         //Fetching selected animals and creating route plan
         AnimalList anList = new AnimalList(this, "exhibit_info.json","trail_info.json","zoo_graph.json");
-        currentLocation = "entrance_exit_gate";
+        currIndex = AnimalList.currentIndex;
+        Log.d("CurrentIndex", String.valueOf(currIndex));
+        currentLocation = AnimalList.currentLocation;
         previousLocation = currentLocation;
         animalRoute = anList.generateArrayList(currentLocation);
         animalRoute = Directions.computeRoute(currentLocation,animalRoute, ZooGraphConstruct);
@@ -255,7 +256,7 @@ public class DirectionsActivity extends AppCompatActivity {
         //Basically the same as next btn except does not add animal to previous animals list
         //NOTE:this will be one off, need to grab current code for previousAnimal
         if (noSelectedAnimals) return;
-        previousLocation = currentLocation;
+        currentLocation = previousLocation;
 
         //take sublist from current index to end remove the one we're skipping
         //rerun calculations and add to the list before
@@ -354,14 +355,14 @@ public class DirectionsActivity extends AppCompatActivity {
 
     //APP NAVIGATION FUNCTIONS
     public void returnToHome(View view) {
-        //AnimalList.updateSelected_animal_nodes(selectedAnimals); //TODO ADD CONFIRM HOME SCREEN...
+        AnimalList.updateSelected_animal_nodes(currIndex, previousLocation);
         finish();
     }
 
-//    public void returnToRoutePlan(View view) {
-//        //AnimalList.updateSelected_animal_nodes(selectedAnimals);
-//        Intent intent = new Intent(this, MapActivity.class);
-//        startActivity(intent);
-//        finish();
-//    }
+    public void returnToRoutePlan(View view) {
+        AnimalList.updateSelected_animal_nodes(currIndex, previousLocation);
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
