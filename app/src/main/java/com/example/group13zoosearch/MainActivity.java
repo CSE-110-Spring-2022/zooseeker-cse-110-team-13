@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<AnimalNode> temp = info.generateArrayList(info.getCurrentLocation());
         temp = Directions.computeRoute(info.getCurrentLocation(),temp, info.getZoo_graph_info());
         animalAdapter.setAnimalNodeList(temp);
-        //TODO Fix recycler view visual bug (Only shows 7 animals then starts to repeat)
     }
 
     public void OnSearchClicked(View view) {
