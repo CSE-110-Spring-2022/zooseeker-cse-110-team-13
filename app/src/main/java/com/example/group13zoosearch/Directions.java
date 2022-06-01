@@ -1,6 +1,7 @@
 package com.example.group13zoosearch;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -12,6 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Directions {
     /**
@@ -53,6 +59,50 @@ public class Directions {
         return DijkstraShortestPath.findPathBetween(g, start, end);
     }
 
+    public static List<String> getDirectionsList(String start, AnimalNode currAnimal, Graph<String, IdentifiedWeightedEdge> zooGraph, Map<String, EdgeNameItem> edgeNodes, Map<String, AnimalNode> animalNodes){
+        GraphPath<String, IdentifiedWeightedEdge> pathFound;
+        List<String> directions = new ArrayList<String>();
+
+        if(currAnimal.group_id == null) {
+            pathFound = Directions.computeDirections(start, currAnimal.id, zooGraph);
+        } else {
+            pathFound = Directions.computeDirections(start, currAnimal.group_id, zooGraph);
+        }
+
+        List<String> nodes = pathFound.getVertexList();
+        Log.d("nodes: ", nodes.toString());
+
+        int i = 1;
+        DirectionStepItem temp = null;
+        for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
+            temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
+                    Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name);
+            directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
+            Log.d("directions", temp.toString());
+            i++;
+        }
+        return directions;
+    }
+
+    public static ArrayList<AnimalNode> computeRoute(String start, ArrayList<AnimalNode> selected_exhibits, Graph<String, IdentifiedWeightedEdge> g){
+        ArrayList<AnimalNode> route = new ArrayList<AnimalNode>();
+        ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>();
+        String currLoc = start;
+        int size = selected_exhibits.size();
+
+        for(int i = 0; i < size; i++){
+            temp = sortArrayList(currLoc, selected_exhibits ,g);
+            route.add(temp.get(0));
+            if(temp.get(0).group_id == null){
+                currLoc = temp.get(0).id;
+            }else{currLoc = temp.get(0).group_id;}
+            Log.d("adding:", temp.get(0).toString());
+            selected_exhibits.remove(temp.get(0));
+        }
+
+        return route;
+    }
+
     /**
      * utility method for computing the total distance of the path from start to end nodes in a graph
      *
@@ -76,6 +126,27 @@ public class Directions {
             distance += g.getEdgeWeight(e);
         }
         return distance;
+    }
+
+    /**
+     * Generates an arrayList of animalNodes ordered by distance from the curr given Location
+     **/
+    public static ArrayList<AnimalNode> sortArrayList(String currLoc, ArrayList<AnimalNode> list, Graph<String, IdentifiedWeightedEdge> g){
+        ArrayList<AnimalNode> nodeList = new ArrayList<AnimalNode>();
+
+        //Finding all animalNodes corresponding to strings in specified list
+        for(AnimalNode animal : list){
+            animal.updateDistance(currLoc, g);
+            nodeList.add(animal);
+        }
+       nodeList.sort(new Comparator<AnimalNode>() {
+            //Sorting via distance
+            @Override
+            public int compare(AnimalNode a1, AnimalNode a2) {
+                return Double.compare(a1.distance_from_location, a2.distance_from_location);
+            }
+        });
+        return nodeList;
     }
 
     /**
