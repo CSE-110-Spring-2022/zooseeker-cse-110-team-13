@@ -24,6 +24,7 @@ public class DirectionsActivity extends AppCompatActivity {
     private Graph<String, IdentifiedWeightedEdge> ZooGraphConstruct;
     private List<String> directions;
     private String currentLocation;
+    private String previousLocation;
     private String currentLocationName;
     private TextView animalToVisit;
     TextView noAnimalsSelected;
@@ -77,6 +78,7 @@ public class DirectionsActivity extends AppCompatActivity {
         //Fetching selected animals and creating route plan
         AnimalList anList = new AnimalList(this, "exhibit_info.json","trail_info.json","zoo_graph.json");
         currentLocation = "entrance_exit_gate";
+        previousLocation = currentLocation;
         animalRoute = anList.generateArrayList(currentLocation);
         animalRoute = Directions.computeRoute(currentLocation,animalRoute, ZooGraphConstruct);
         Log.d("Animal Route created:", animalRoute.toString());
@@ -126,6 +128,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void nextDirections(View view) {
+        previousLocation = currentLocation;
         if (noSelectedAnimals) return;
         directions.clear();
         if(currIndex < 0){currIndex = 0;}else {
@@ -194,6 +197,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void previousDirections(View view) {
+        previousLocation = currentLocation;
         if (noSelectedAnimals) return;
 
         directions.clear();
@@ -251,6 +255,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void skipDirections(View view) {
+        previousLocation = currentLocation;
        //Basically the same as next btn except does not add animal to previous animals list
         if (noSelectedAnimals) return;
 
@@ -328,10 +333,10 @@ public class DirectionsActivity extends AppCompatActivity {
         //TODO some call to refresh directions
         directions.clear();
         if(detailed==true){
-            directions = Directions.getDirectionsList(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            directions = Directions.getDirectionsList(previousLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
         }
         else{
-            directions = Directions.getDirectionsListBrief(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            directions = Directions.getDirectionsListBrief(previousLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
         }
         listAdapter.setDirectionItems(directions);
         Log.d("Button: ","Toggle");
