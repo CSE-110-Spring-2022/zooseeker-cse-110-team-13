@@ -1,7 +1,10 @@
 package com.example.group13zoosearch;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;

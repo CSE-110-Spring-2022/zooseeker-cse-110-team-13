@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapActivity">
+
+    <Button
+        android:layout_width="126dp"
+        android:layout_height="72dp"
+        android:id="@+id/center_btn"
+        android:layout_centerHorizontal="true"
+        android:autoSizeTextType="uniform"
+        android:text="Center" />
+
+    <Button
+        android:id="@+id/calibrate_btn"
+        android:layout_width="126dp"
+        android:layout_height="72dp"
+        android:autoSizeTextType="uniform"
+        android:text="Calibrate"
+        android:onClick="calibrateBtn"/>
+
+    <fragment
+        android:id="@+id/google_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="386dp"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:text="Directions"
+            android:autoSizeTextType="uniform"
+            android:layout_marginBottom="2dp"/>
+
+        <TextView
+            android:id="@+id/route_overview_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:text="ROUTE OVERVIEW"
+            android:textColor="@color/black"
+            android:textSize="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.063" />
+
+        <Button
+            android:id="@+id/Direction_btn_route_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toDirections"
+            android:text="Directions"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.929"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.942"
+            tools:ignore="OnClick" />
+
+        <Button
+            android:id="@+id/home_btn_route_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="returnToHome"
+            android:text="     Home     "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.944"
+            tools:ignore="OnClick" />
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -111,11 +111,11 @@ public class DirectionsActivity extends AppCompatActivity {
             headingToText.setVisibility(View.INVISIBLE);
         }
         listAdapter.setDirectionItems(directions);
+        Log.d("Current Number of Directions to arrive:", Integer.toString(listAdapter.getItemCount()));
     }
 
     public void nextDirections(View view) {
         if (noSelectedAnimals) return;
-
         directions.clear();
         if(currIndex < 0){currIndex = 0;}else {
             while (currIndex < animalRoute.size() && animalRoute.get(currIndex).visited) {
@@ -170,16 +170,17 @@ public class DirectionsActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.INVISIBLE);
             return;
         }
+
         listAdapter.setDirectionItems(directions);
+        Log.d("Next Button: ","Next");
     }
 
     public void previousDirections(View view) {
         if (noSelectedAnimals) return;
-        //TODO: need to add this logic to Directions.java to make it easier to be used in other places
 
         directions.clear();
 
-        if(visitedAnimals.empty() || currIndex <= -1){     //TODO will need to add some checks to hide this after in next
+        if(visitedAnimals.empty() || currIndex <= -1){   
             noAnimalsSelected.setText("No previous Exhibits");
             noAnimalsSelected.setVisibility(View.VISIBLE);
             headingToText.setVisibility(View.INVISIBLE);
@@ -221,6 +222,7 @@ public class DirectionsActivity extends AppCompatActivity {
         } else {
             finish();
         }
+        Log.d("Button: ","Previous");
     }
 
     public void skipDirections(View view) {
@@ -275,7 +277,9 @@ public class DirectionsActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.INVISIBLE);
             return;
         }
+
         listAdapter.setDirectionItems(directions);
+        Log.d("Button: ","Skip");
     }
 
     public void setCurrentLocation(String currentLocation) {
@@ -290,6 +294,7 @@ public class DirectionsActivity extends AppCompatActivity {
         if(detailed){ detailed = false; } else {detailed = true;}
         Log.d("Detailed Directions:", String.valueOf(detailed));
         //TODO some call to refresh directions
+        Log.d("Button: ","Toggle");
     }
 
     //APP NAVIGATION FUNCTIONS
@@ -300,7 +305,7 @@ public class DirectionsActivity extends AppCompatActivity {
 
     public void returnToRoutePlan(View view) {
         //AnimalList.updateSelected_animal_nodes(selectedAnimals);
-        Intent intent = new Intent(this, RoutePlanActivity.class);
+        Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
         finish();
     }
