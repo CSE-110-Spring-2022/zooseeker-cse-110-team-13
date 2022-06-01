@@ -82,6 +82,7 @@ public class DirectionsActivity extends AppCompatActivity {
         animalRoute = anList.generateArrayList(currentLocation);
         animalRoute = Directions.computeRoute(currentLocation,animalRoute, ZooGraphConstruct);
         Log.d("Animal Route created:", animalRoute.toString());
+        AnimalRoute.animalRoute = animalRoute;
         visitedAnimals = new Stack<AnimalNode>();
 
         //SETTING UP FIRST DIRECTION LIST
