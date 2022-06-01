@@ -57,7 +57,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     LatLng currLoc;
     Polyline polyline = null;
     Context context = this;
-    DirectionsBuilder db;
+    //DirectionsBuilder db;
     SupportMapFragment supportMapFragment;
     List<LatLng> latLngList = new ArrayList<>();
     List<Marker> markerList = new ArrayList<>();
@@ -70,7 +70,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //We will intialize the values and our Directions Builder to receive our directions needed
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
-        db = new DirectionsBuilder();
+        //db = new DirectionsBuilder();
         latEdit = (TextInputEditText)findViewById(R.id.lat_input);
         longEdit = (TextInputEditText)findViewById(R.id.long_input);
         //Our support map fragment is stored in a variable here
@@ -128,7 +128,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                  updatePosition(latLng);
                                  googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                                  googleMap.addMarker(Options);
-                                 db.generateDirections(currLoc,context);
+
                                  //MarkerOptions markerOptions = new MarkerOptions().position(latLng);
                                  //latLngList.add(latLng);
                                  //Marker marker = gMap.addMarker(markerOptions);
@@ -277,38 +277,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //
 //    }
     //Draws all locations on the map
-    public void generateMarkers()
-    {
-        clearPath();
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position(currLoc).title("You");
-        Marker marker = gMap.addMarker(markerOptions);
-        latLngList.add((currLoc));
-        markerList.add(marker);
-        for(String x: db.animalNodes.keySet())
-        {
-            Log.d("Node String", db.animalNodes.get(x).toString());
-            if(db.animalNodes.get(x).lat!=null)
-            {
-                markerOptions = new MarkerOptions()
-                    .position(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng))
-                        .title(db.animalNodes.get(x).name);
-                marker = gMap.addMarker(markerOptions);
-                latLngList.add(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng));
-                markerList.add(marker);
-                if(polyline != null) polyline.remove();
-                //Create PolylineOptions
-                PolylineOptions polylineOptions = new PolylineOptions()
-                        .addAll(latLngList).clickable(true);
-                polyline = gMap.addPolyline(polylineOptions);
-
-                polyline.setColor(Color.rgb(red,green,blue));
-            }
+//    public void generateMarkers()
+//    {
+//        clearPath();
+//        MarkerOptions markerOptions = new MarkerOptions()
+//                .position(currLoc).title("You");
+//        Marker marker = gMap.addMarker(markerOptions);
+//        latLngList.add((currLoc));
+//        markerList.add(marker);
+//        for(String x: db.animalNodes.keySet())
+//        {
+//            Log.d("Node String", db.animalNodes.get(x).toString());
+//            if(db.animalNodes.get(x).lat!=null)
+//            {
+//                markerOptions = new MarkerOptions()
+//                    .position(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng))
+//                        .title(db.animalNodes.get(x).name);
+//                marker = gMap.addMarker(markerOptions);
+//                latLngList.add(new LatLng(db.animalNodes.get(x).lat,db.animalNodes.get(x).lng));
+//                markerList.add(marker);
+//                if(polyline != null) polyline.remove();
+//                //Create PolylineOptions
+//                PolylineOptions polylineOptions = new PolylineOptions()
+//                        .addAll(latLngList).clickable(true);
+//                polyline = gMap.addPolyline(polylineOptions);
+//
+//                polyline.setColor(Color.rgb(red,green,blue));
+//            }
 
             //Create Marker
             //
-        }
-    }
+//        }
+//    }
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         gMap = googleMap;
@@ -318,7 +318,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
            {
                //Create MarkerOptions
                currLoc = latLng;
-               db.generateDirections(latLng,context);
+//               db.generateDirections(latLng,context);
                drawLines();
                //db.updateLocations(latLng,context);
            }
@@ -332,7 +332,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Location cloc = location;
         LatLng cll = new LatLng(cloc.getLatitude(),cloc.getLongitude());
         //db.generateDirections(cll,this);
-        db.updateLocations(cll,this);
+//        db.updateLocations(cll,this);
         // use latitude and longitude given by
         // location.getLatitude(), location.getLongitude()
         // for updated location marker
@@ -365,7 +365,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
             currLoc = latLng;
             gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-            db.generateDirections(latLng,context);
+//            db.generateDirections(latLng,context);
             drawLines();
             Toast.makeText(this, "Amenotejikara! Successfully Teleported, Omae Wa Mou Shindeiru ", Toast.LENGTH_LONG).show();
         }
