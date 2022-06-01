@@ -47,14 +47,12 @@ public class AnimalNodeAdapter extends RecyclerView.Adapter<AnimalNodeAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView nameText;
         private TextView distanceText;
-        private TextView ETAText;
         private AnimalNode animalNode;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.nameText = itemView.findViewById(R.id.animal_name_txt);
             this.distanceText = itemView.findViewById(R.id.distance_to_animal_txt);
-            this.ETAText = itemView.findViewById(R.id.ETA_txt);
         }
 
         //Getters
@@ -68,19 +66,12 @@ public class AnimalNodeAdapter extends RecyclerView.Adapter<AnimalNodeAdapter.Vi
             this.distanceText.setText(dist);
         }
 
-        public void setETAText(TextView ETAText) {
-            String eta = Double.toString(animalNode.ETA_time);
-            this.ETAText.setText(eta);
-        }
-
         public void setAnimalNode(AnimalNode animalNode) {
             String dist = Double.toString(animalNode.distance_from_location);
-            String eta = Double.toString(animalNode.ETA_time);
 
             this.animalNode = animalNode;
             this.nameText.setText(animalNode.name);
-            this.distanceText.setText(dist);
-            this.ETAText.setText(eta);
+            this.distanceText.setText(dist + " ft");
         }
     }
 }

@@ -33,6 +33,7 @@ public class AnimalNode {
     public Double lat;
     public Double lng;
     public boolean favorited;
+    public boolean visited;
     public double distance_from_location;
     public double ETA_time; //time in minutes
 
@@ -46,6 +47,7 @@ public class AnimalNode {
         this.lat = lat;
         this.lng = lng;
         this.favorited = false;
+        this.visited = false;
         this.distance_from_location = 0;
         this.ETA_time = 0;
     }
@@ -68,6 +70,8 @@ public class AnimalNode {
         AnimalNode that = (AnimalNode) o;
         return id.equals(that.id);
     }
+
+
 
     @Override
     public int hashCode() {

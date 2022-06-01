@@ -1,11 +1,11 @@
 package com.example.group13zoosearch;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.jgrapht.Graph;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -13,6 +13,7 @@ public class AnimalList {
 
     static PriorityQueue<AnimalNode> selected_animal_nodes;
     static ArrayList<AnimalNode> visited_animal_nodes;
+    static ArrayList<AnimalNode> selected_animal_nodes_list;
     static ArrayList<String> selected_exhibits = new ArrayList<>();
     public Context context;
 
@@ -48,6 +49,28 @@ public class AnimalList {
         }
 
         return selected_animal_nodes;
+    }
+
+    /**
+     * Generates an arrayList of animalNodes ordered by distance from the curr given Location
+     **/
+    public ArrayList<AnimalNode> generateArrayList(String currLoc){
+        selected_animal_nodes_list = new ArrayList<AnimalNode>();
+
+        //Finding all animalNodes corresponding to strings in specified list
+        for(String str : selected_exhibits){
+            AnimalNode temp = all_animal_nodes.get(str);
+            temp.updateDistance(currLoc, zoo_graph_info);
+            selected_animal_nodes_list.add(temp);
+        }
+        selected_animal_nodes_list.sort(new Comparator<AnimalNode>() {
+            //Sorting via distance
+            @Override
+            public int compare(AnimalNode a1, AnimalNode a2) {
+                return Double.compare(a1.distance_from_location, a2.distance_from_location);
+            }
+        });
+        return selected_animal_nodes_list;
     }
 
     /*
@@ -110,13 +133,13 @@ public class AnimalList {
 
     //Update methods are called when any activities that make edits to these lists take place
     public static void updateSelected_animal_nodes(PriorityQueue<AnimalNode> selected) {
-        selected_animal_nodes = selected;
-        ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>(selected_animal_nodes);
-        selected_exhibits.clear();
-        for(AnimalNode animal : temp){
-            selected_exhibits.add(animal.id);
-        }
-        Log.d("AnimalList SelectedAnimals", String.valueOf(selected_animal_nodes));
+//        selected_animal_nodes = selected;
+//        ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>(selected_animal_nodes);
+//        selected_exhibits.clear();
+//        for(AnimalNode animal : temp){
+//            selected_exhibits.add(animal.id);
+//        }
+//        Log.d("AnimalList SelectedAnimals", String.valueOf(selected_animal_nodes));
     }
 
     public void updateVisited_animal_nodes(ArrayList<AnimalNode> visited) {

@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -44,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
         saveBtn = findViewById(R.id.save_btn);
         loadExhibits();
-        info = new AnimalList(this, "exhibit_info.json", "trail_info.json", "zoo_graph");
+        info = new AnimalList(this, "exhibit_info.json", "trail_info.json", "zoo_graph.json");
 
         animalAdapter = new AnimalNodeAdapter();
-        animalAdapter.setHasStableIds(true);
+        animalAdapter.setHasStableIds(false);
 
         recyclerView = findViewById(R.id.animal_node_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -67,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        //This was me messing around with a recycler view on the main activity page
-        // we can decide to remove this later
+        //Displays current route plan
         selectedAnimals = info.generatePriorityQueue();
-        ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>(selectedAnimals);
+        ArrayList<AnimalNode> temp = info.generateArrayList(info.getCurrentLocation());
+        temp = Directions.computeRoute(info.getCurrentLocation(),temp, info.getZoo_graph_info());
         animalAdapter.setAnimalNodeList(temp);
     }
 
