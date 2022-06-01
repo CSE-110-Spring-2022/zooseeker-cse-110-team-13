@@ -79,11 +79,72 @@ public class Directions {
         DirectionStepItem temp = null;
         for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
             temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
-                    Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name);
+                    Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name,null);
             directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
             Log.d("directions", temp.toString());
             i++;
         }
+        return directions;
+    }
+
+    public static List<String> getDirectionsListBrief(String start, AnimalNode currAnimal, Graph<String, IdentifiedWeightedEdge> zooGraph, Map<String, EdgeNameItem> edgeNodes, Map<String, AnimalNode> animalNodes){
+        GraphPath<String, IdentifiedWeightedEdge> pathFound;
+        List<String> directions = new ArrayList<String>();
+
+        if(currAnimal.group_id == null) {
+            pathFound = Directions.computeDirections(start, currAnimal.id, zooGraph);
+        } else {
+            pathFound = Directions.computeDirections(start, currAnimal.group_id, zooGraph);
+        }
+
+        List<String> nodes = pathFound.getVertexList();
+        Log.d("nodes: ", nodes.toString());
+
+        int i = 1;
+        DirectionStepItem temp = null;
+        DirectionStepItem previous = null;
+        double total_distance = 0;
+        String message="haha";
+        List<DirectionStepItem> previousItem= new ArrayList<DirectionStepItem>();
+        for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
+            if(previousItem.size()==0){
+                temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
+                        Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name,null);
+            }
+            else{
+                temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
+                        Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name,previousItem.get(previousItem.size()-1));
+            }
+
+            //previous = temp;
+            previousItem.add(temp);
+
+            if(temp.getPreviousNodeItem()==null){
+                total_distance+=temp.getDistance();
+                Log.d("temp_name",temp.getRoad());
+                Log.d("pre_name_null",temp.getPreviousNodeItem().getRoad());
+                continue;
+            }
+            Log.d("temp_Name",temp.getRoad());
+            Log.d("pre_name",temp.getPreviousNodeItem().getRoad());
+            if(temp.getPreviousNodeItem().getRoad().equals(temp.getRoad())){
+                total_distance+=temp.getDistance();
+                Log.d("haha",Double. toString(total_distance));
+            }
+            else{
+                message = temp.getPreviousNodeItem().getCount()+ ". Head " + total_distance + "ft on "+ temp.getPreviousNodeItem().getRoad() + " towards " + temp.getPreviousNodeItem().getNextNode() + "\n";
+                total_distance = 0;
+                directions.add(message);
+                Log.d("directions",message);
+            }
+
+            //directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
+            //Log.d("directions", temp.toString());
+            i++;
+        }
+        message = temp.getPreviousNodeItem().getCount()+ ". Head " + total_distance + "ft on "+ temp.getPreviousNodeItem().getRoad() + " towards " + temp.getPreviousNodeItem().getNextNode() + "\n";
+        directions.add(message);
+        Log.d("directions",message);
         return directions;
     }
 
