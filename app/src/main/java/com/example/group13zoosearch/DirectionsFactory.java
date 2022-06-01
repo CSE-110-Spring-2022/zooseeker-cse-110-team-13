@@ -30,6 +30,27 @@ public class DirectionsFactory {
     public static boolean noSelectedAnimals;
     public static String currentLocationName;
 
+
+    private static double distance(LatLng l1, LatLng l2) {
+        double theta = l1.longitude - l2.longitude;
+        double dist = Math.sin(deg2rad(l1.latitude))
+                * Math.sin(deg2rad(l2.latitude))
+                + Math.cos(deg2rad(l1.latitude))
+                * Math.cos(deg2rad(l2.latitude))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private static double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
     public static void nextDirections() {
         previousLocation = currentLocation;
         if (noSelectedAnimals) return;
@@ -99,12 +120,30 @@ public class DirectionsFactory {
         //Creating graph
         ZooGraphConstruct = Directions.loadZooGraphJSON(cnt, "zoo_graph.json");
         Log.d("animalGraph", ZooGraphConstruct.toString());
+        AnimalNode currClosest = null;
+        double smallest = Double.MAX_VALUE;
         //Fetching selected animals and creating route plan
         AnimalList anList = new AnimalList(cnt, "exhibit_info.json","trail_info.json","zoo_graph.json");
-        currentLocation = "entrance_exit_gate";
+        for (Map.Entry<String, AnimalNode> entry : animalNodes.entrySet()) {
+            try {
+                //Log.d("Lat", entry.getValue().lat.toString());
+                LatLng ln = new LatLng(entry.getValue().lat, entry.getValue().lng);
+                if (currClosest == null || smallest > distance(currLL,ln)) {
+                    currClosest = entry.getValue();
+                    smallest = distance(currLL,ln);
+                }
+            } catch (Exception e) {
+                System.out.println("Oops!");
+            }
+
+        }
+        Log.d("Current_Location",currClosest.id);
+        currentLocation = currClosest.id;
         previousLocation = currentLocation;
-        animalRoute = anList.generateArrayList(currentLocation);
+        animalRoute = anList.generateArrayList2(currentLocation);
+
         animalRoute = Directions.computeRoute(currentLocation,animalRoute, ZooGraphConstruct);
+
         Log.d("Animal Route created:", animalRoute.toString());
         AnimalRoute.animalRoute = animalRoute;
         visitedAnimals = new Stack<AnimalNode>();
@@ -140,6 +179,6 @@ public class DirectionsFactory {
         } else {
             noSelectedAnimals = true;
         }
-
+        //Log.d("Current Number of Directions to arrive:", animalNodes.toString());
     }
 }
