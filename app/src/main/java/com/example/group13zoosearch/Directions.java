@@ -1,10 +1,7 @@
 package com.example.group13zoosearch;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -62,29 +59,55 @@ public class Directions {
         return DijkstraShortestPath.findPathBetween(g, start, end);
     }
 
-    public static List<String> getDirectionsList(String start, AnimalNode currAnimal, Graph<String, IdentifiedWeightedEdge> zooGraph, Map<String, EdgeNameItem> edgeNodes, Map<String, AnimalNode> animalNodes){
-        GraphPath<String, IdentifiedWeightedEdge> pathFound;
-        List<String> directions = new ArrayList<String>();
+    public static List<String> getDirectionsList(String start, AnimalNode currAnimal, Graph<String, IdentifiedWeightedEdge> zooGraph, Map<String, EdgeNameItem> edgeNodes, Map<String, AnimalNode> animalNodes, boolean detailed){
+        if(detailed) {
+            GraphPath<String, IdentifiedWeightedEdge> pathFound;
+            List<String> directions = new ArrayList<String>();
 
-        if(currAnimal.group_id == null) {
-            pathFound = Directions.computeDirections(start, currAnimal.id, zooGraph);
+            if (currAnimal.group_id == null) {
+                pathFound = Directions.computeDirections(start, currAnimal.id, zooGraph);
+            } else {
+                pathFound = Directions.computeDirections(start, currAnimal.group_id, zooGraph);
+            }
+
+            List<String> nodes = pathFound.getVertexList();
+            Log.d("nodes: ", nodes.toString());
+
+            int i = 1;
+            DirectionStepItem temp = null;
+            for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
+                temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
+                        Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name);
+                directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
+                Log.d("directions", temp.toString());
+                i++;
+            }
+            return directions;
         } else {
-            pathFound = Directions.computeDirections(start, currAnimal.group_id, zooGraph);
-        }
+            //TODO ADD LOGIC HERE TO MAKE THIS SIMPLE DIRECTIONS
+            GraphPath<String, IdentifiedWeightedEdge> pathFound;
+            List<String> directions = new ArrayList<String>();
 
-        List<String> nodes = pathFound.getVertexList();
-        Log.d("nodes: ", nodes.toString());
+            if (currAnimal.group_id == null) {
+                pathFound = Directions.computeDirections(start, currAnimal.id, zooGraph);
+            } else {
+                pathFound = Directions.computeDirections(start, currAnimal.group_id, zooGraph);
+            }
 
-        int i = 1;
-        DirectionStepItem temp = null;
-        for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
-            temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
-                    Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name);
-            directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
-            Log.d("directions", temp.toString());
-            i++;
+            List<String> nodes = pathFound.getVertexList();
+            Log.d("nodes: ", nodes.toString());
+
+            int i = 1;
+            DirectionStepItem temp = null;
+            for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
+                temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
+                        Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name);
+                directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
+                Log.d("directions", temp.toString());
+                i++;
+            }
+            return directions;
         }
-        return directions;
     }
 
     public static ArrayList<AnimalNode> computeRoute(String start, ArrayList<AnimalNode> selected_exhibits, Graph<String, IdentifiedWeightedEdge> g){
