@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +22,14 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -33,6 +37,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -43,8 +48,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.regex.Pattern;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationSource.OnLocationChangedListener {
+
+    TextInputEditText latEdit, longEdit;
     GoogleMap gMap;
     LatLng currLoc;
     Polyline polyline = null;
@@ -63,7 +71,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
         db = new DirectionsBuilder();
-
+        latEdit = (TextInputEditText)findViewById(R.id.lat_input);
+        longEdit = (TextInputEditText)findViewById(R.id.long_input);
         //Our support map fragment is stored in a variable here
         supportMapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.google_map);
         supportMapFragment.getMapAsync(this);
@@ -298,8 +307,45 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
 
     }
+    /*Adapted from https://www.baeldung.com/java-check-string-number used regex to check if a string is numerical or not*/
+    public boolean isNumeric(String strNum) {
+        Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+        if (strNum == null) {
+            return false;
+        }
+        return pattern.matcher(strNum).matches();
+    }
     //Button Click Functions
-    public void calibrateBtn(View view){gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currLoc,10));}
+    public void teleport(View view)
+    {
+        String lat = latEdit.getText().toString().replaceAll("\\s+","") ;
+        String lng = longEdit.getText().toString().replaceAll("\\s+","") ;
+        if(isNumeric(lat) && isNumeric(lng))
+        {
+            LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
+            currLoc = latLng;
+            gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+            db.generateDirections(latLng,context);
+            drawLines();
+            Toast.makeText(this, "Amenotejikara! Successfully Teleported, Omae Wa Mou Shindeiru ", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this, "Invalid Inputs ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void calibrateBtn(View view){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Marker marker : markerList) {
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = 0;
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        gMap.moveCamera(cameraUpdate);
+        gMap.animateCamera(cameraUpdate);
+
+    }
     public void returnToHome(View view) {
         finish();
     }
