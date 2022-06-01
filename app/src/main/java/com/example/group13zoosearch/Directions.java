@@ -72,7 +72,6 @@ public class Directions {
             List<String> nodes = pathFound.getVertexList();
             Log.d("nodes: ", nodes.toString());
 
-
         int i = 1;
         DirectionStepItem temp = null;
         for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
@@ -153,7 +152,21 @@ public class Directions {
         Log.d("directions",message);}
         return directions;
     }
+    public static void getDirectionsListBriefGenNodes(String start, AnimalNode currAnimal, Graph<String, IdentifiedWeightedEdge> zooGraph, Map<String, EdgeNameItem> edgeNodes, Map<String, AnimalNode> animalNodes){
+        GraphPath<String, IdentifiedWeightedEdge> pathFound;
+        List<String> directions = new ArrayList<String>();
 
+        if(currAnimal.group_id == null) {
+            pathFound = Directions.computeDirections(start, currAnimal.id, zooGraph);
+        } else {
+            pathFound = Directions.computeDirections(start, currAnimal.group_id, zooGraph);
+        }
+
+        List<String> nodes = pathFound.getVertexList();
+        Log.d("nodes: ", nodes.toString());
+        DirectionsFactory.directionNodes = nodes;
+
+    }
     public static ArrayList<AnimalNode> computeRoute(String start, ArrayList<AnimalNode> selected_exhibits, Graph<String, IdentifiedWeightedEdge> g){
         ArrayList<AnimalNode> route = new ArrayList<AnimalNode>();
         ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>();

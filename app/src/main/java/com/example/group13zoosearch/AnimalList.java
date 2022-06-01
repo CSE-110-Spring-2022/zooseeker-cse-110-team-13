@@ -2,6 +2,8 @@ package com.example.group13zoosearch;
 
 import android.content.Context;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.jgrapht.Graph;
 
 import java.util.ArrayList;
@@ -30,7 +32,6 @@ public class AnimalList {
         this.edges = EdgeNameItem.loadNodeInfoJSON(context, edgePath);
         this.zoo_graph_info = Directions.loadZooGraphJSON(context, graphPath);
         this.currentLocation = "entrance_exit_gate";        //TODO MAKE THIS WORK WITH GPS COORDS
-
         //Empty lists for directions later
         this.selected_animal_nodes = new PriorityQueue<AnimalNode>((node1, node2) ->
                 Double.compare(node1.distance_from_location, node2.distance_from_location)
@@ -72,7 +73,28 @@ public class AnimalList {
         });
         return selected_animal_nodes_list;
     }
+    public ArrayList<AnimalNode> generateArrayList2(String currLoc){
+        selected_animal_nodes_list = new ArrayList<AnimalNode>();
 
+        //Finding all animalNodes corresponding to strings in specified list
+        for (Map.Entry<String, AnimalNode> entry : DirectionsFactory.animalNodes.entrySet()) {
+
+                AnimalNode temp =entry.getValue();
+                temp.updateDistance(currLoc, zoo_graph_info);
+                selected_animal_nodes_list.add(temp);
+
+        }
+
+
+        selected_animal_nodes_list.sort(new Comparator<AnimalNode>() {
+            //Sorting via distance
+            @Override
+            public int compare(AnimalNode a1, AnimalNode a2) {
+                return Double.compare(a1.distance_from_location, a2.distance_from_location);
+            }
+        });
+        return selected_animal_nodes_list;
+    }
     /*
      * Adds animal node to the front of visited animals list
      * This animal node must be an animal exhibit (not an intersection/non-exhibit node)

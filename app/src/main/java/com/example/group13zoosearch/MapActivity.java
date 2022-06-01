@@ -79,7 +79,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         //client will store the services to receive our current location
         client = LocationServices.getFusedLocationProviderClient(this);
-
+        DirectionsFactory.generate(this);
         //We check permissions to access our current location for our activity
         //We will then run our functions to generate the routes
         if (ActivityCompat.checkSelfPermission(MapActivity.this,
@@ -99,6 +99,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onResume() {
 
         super.onResume();
+        DirectionsFactory.generate(this);
         if (ActivityCompat.checkSelfPermission(MapActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             //We will recalculate the location once we resume the activity
@@ -125,6 +126,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                  MarkerOptions Options = new MarkerOptions().position(latLng).title("Your position");
                                  currLoc = latLng;
+                                 DirectionsFactory.currLL = latLng;
+                                 DirectionsFactory.generate(context);
                                  updatePosition(latLng);
                                  googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                                  googleMap.addMarker(Options);
@@ -193,7 +196,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     public void drawLines()
     {
-       ArrayList<AnimalNode> aR = AnimalRoute.animalRoute;
+        DirectionsFactory.generate(this);
+        //Log.d("The Values are", DirectionsFactory.directionNodes.toString());
+       ArrayList<AnimalNode> aR = DirectionsFactory.animalRoute;
         clearPath();
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(currLoc).title("You");
@@ -204,32 +209,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         for(AnimalNode val : aR)
         {
-            Log.d("Directions dg", val.toString());
-            AnimalNode node = val;
-            if(node.lat!= null)
-            {
-                Log.d("We Made it Here", node.toString());
-                LatLng latLng = new LatLng(node.lat,node.lng);
-                markerOptions = new MarkerOptions().position(latLng).title(node.name);
-                //Create Marker
-                marker = gMap.addMarker(markerOptions);
-                //Add Latlng and Marker
-                latLngList.add(latLng);
-                markerList.add(marker);
-                if(polyline != null) polyline.remove();
-                //Create PolylineOptions
-                PolylineOptions polylineOptions = new PolylineOptions()
-                        .addAll(latLngList).clickable(true);
-                polyline = gMap.addPolyline(polylineOptions);
 
-                polyline.setColor(Color.rgb(red,green,blue));
+
+                AnimalNode node = val;
+                if(node == null){
+
+                }
+                if(node.lat == null && node.group_id!= null) {
+                    node = DirectionsFactory.animalNodes.get(node.group_id);
+                }
+                if(node.lat!= null)
+                {
+                    Log.d("We Made it Here", node.toString());
+                    LatLng latLng = new LatLng(node.lat,node.lng);
+                    markerOptions = new MarkerOptions().position(latLng).title(node.name);
+                    //Create Marker
+                    marker = gMap.addMarker(markerOptions);
+                    //Add Latlng and Marker
+                    latLngList.add(latLng);
+                    markerList.add(marker);
+                    if(polyline != null) polyline.remove();
+                    //Create PolylineOptions
+                    PolylineOptions polylineOptions = new PolylineOptions()
+                            .addAll(latLngList).clickable(true);
+                    polyline = gMap.addPolyline(polylineOptions);
+
+                    polyline.setColor(Color.rgb(red,green,blue));
+                }
+
             }
-            Log.d("Markers",latLngList.toString());
-            Log.d("LatLngList",latLngList.toString());
 
-
-
-        }
+            //Log.d("Markers",latLngList.toString());
+            //Log.d("LatLngList",latLngList.toString());
 
     }
 //    public void drawLines()
@@ -318,6 +329,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
            {
                //Create MarkerOptions
                currLoc = latLng;
+               DirectionsFactory.currLL = latLng;
+               DirectionsFactory.generate(context);
 //               db.generateDirections(latLng,context);
                drawLines();
                //db.updateLocations(latLng,context);
@@ -364,6 +377,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         {
             LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lng));
             currLoc = latLng;
+            DirectionsFactory.currLL = latLng;
+            DirectionsFactory.generate(context);
             gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
 //            db.generateDirections(latLng,context);
             drawLines();
