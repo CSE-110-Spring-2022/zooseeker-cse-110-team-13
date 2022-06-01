@@ -118,17 +118,10 @@ public class Directions {
 
             if(temp.getPreviousNodeItem()==null){
                 total_distance+=temp.getDistance();
-                //Log.d("temp_name",temp.getRoad());
-                //Log.d("pre_name_null",temp.getPreviousNodeItem().getRoad());
-                //Log.d("pre_name_null",temp.getPreviousNodeItem().getNextNode());
-                //Log.d("pre_name_null",temp.getPreviousNodeItem().toString());
                 continue;
             }
-            Log.d("temp_Name",temp.getRoad());
-            Log.d("pre_name",temp.getPreviousNodeItem().getRoad());
             if(temp.getPreviousNodeItem().getRoad().equals(temp.getRoad())){
                 total_distance+=temp.getDistance();
-                Log.d("haha",Double. toString(total_distance));
             }
             else{
 
@@ -138,9 +131,6 @@ public class Directions {
                 Log.d("directions",message);
                 i++;
             }
-
-            //directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
-            //Log.d("directions", temp.toString());
         }
         if(temp==null){
             Log.d("null error","");

@@ -1,6 +1,7 @@
 package com.example.group13zoosearch;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.jgrapht.Graph;
 
@@ -15,9 +16,9 @@ public class AnimalList {
     static ArrayList<AnimalNode> visited_animal_nodes;
     static ArrayList<AnimalNode> selected_animal_nodes_list;
     static ArrayList<String> selected_exhibits = new ArrayList<>();
+    static int currentIndex = 0;        //To be used only by directionsActivity
+    static String currentLocation = "entrance_exit_gate";
     public Context context;
-
-    private String currentLocation;
 
     //loaded data from JSON files
     private Map<String, AnimalNode> all_animal_nodes;
@@ -29,7 +30,6 @@ public class AnimalList {
         this.all_animal_nodes = AnimalNode.loadNodeInfoJSON(context, nodePath);;
         this.edges = EdgeNameItem.loadNodeInfoJSON(context, edgePath);
         this.zoo_graph_info = Directions.loadZooGraphJSON(context, graphPath);
-        this.currentLocation = "entrance_exit_gate";        //TODO MAKE THIS WORK WITH GPS COORDS
 
         //Empty lists for directions later
         this.selected_animal_nodes = new PriorityQueue<AnimalNode>((node1, node2) ->
@@ -132,22 +132,9 @@ public class AnimalList {
     }
 
     //Update methods are called when any activities that make edits to these lists take place
-    public static void updateSelected_animal_nodes(PriorityQueue<AnimalNode> selected) {
-//        selected_animal_nodes = selected;
-//        ArrayList<AnimalNode> temp = new ArrayList<AnimalNode>(selected_animal_nodes);
-//        selected_exhibits.clear();
-//        for(AnimalNode animal : temp){
-//            selected_exhibits.add(animal.id);
-//        }
-//        Log.d("AnimalList SelectedAnimals", String.valueOf(selected_animal_nodes));
-    }
-
-    public void updateVisited_animal_nodes(ArrayList<AnimalNode> visited) {
-        visited_animal_nodes = visited;
-    }
-
-    public static void updateSelected_exhibits(ArrayList<String> selected_exhibits) {
-        //TODO this method should update the string list to match the priority queue
-        AnimalList.selected_exhibits = selected_exhibits;
+    public static void updateSelected_animal_nodes(int index, String loc) {
+        currentIndex = index;
+        currentLocation = loc;
+        Log.d("Saved Index", String.valueOf(index));
     }
 }

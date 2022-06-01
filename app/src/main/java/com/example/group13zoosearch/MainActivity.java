@@ -67,9 +67,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         //Displays current route plan
-        selectedAnimals = info.generatePriorityQueue();
         ArrayList<AnimalNode> temp = info.generateArrayList(info.getCurrentLocation());
-        temp = Directions.computeRoute(info.getCurrentLocation(),temp, info.getZoo_graph_info());
+        temp = Directions.computeRoute("entrance_exit_gate",temp, info.getZoo_graph_info());
         animalAdapter.setAnimalNodeList(temp);
     }
 
@@ -140,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("shared preference",MODE_PRIVATE);
         sharedPreferences.edit().clear().commit();
         String json = sharedPreferences.getString("exhibits list", null);
-        selectedAnimals.clear();
         AnimalList.selected_exhibits.clear();
         animalAdapter = new AnimalNodeAdapter();
         animalAdapter.setHasStableIds(true);
