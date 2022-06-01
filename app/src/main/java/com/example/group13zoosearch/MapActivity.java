@@ -191,28 +191,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         latLngList.clear();
         markerList.clear();
     }
-
     public void drawLines()
     {
-        Log.d("ASERS","SPAGHETTI");
+       ArrayList<AnimalNode> aR = AnimalRoute.animalRoute;
         clearPath();
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(currLoc).title("You");
         Marker marker = gMap.addMarker(markerOptions);
         latLngList.add((currLoc));
         markerList.add(marker);
-        if(db.nodes.size()>1)
-        {
-            db.nodes.remove(0);
-        }
 
-        for(String val : db.nodes)
+
+        for(AnimalNode val : aR)
         {
-            Log.d("Directions String", val);
-            AnimalNode node = db.animalNodes.get(val);
+            Log.d("Directions dg", val.toString());
+            AnimalNode node = val;
             if(node.lat!= null)
             {
-
+                Log.d("We Made it Here", node.toString());
                 LatLng latLng = new LatLng(node.lat,node.lng);
                 markerOptions = new MarkerOptions().position(latLng).title(node.name);
                 //Create Marker
@@ -236,6 +232,50 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
     }
+//    public void drawLines()
+//    {
+//        Log.d("ASERS","SPAGHETTI");
+//        clearPath();
+//        MarkerOptions markerOptions = new MarkerOptions()
+//                .position(currLoc).title("You");
+//        Marker marker = gMap.addMarker(markerOptions);
+//        latLngList.add((currLoc));
+//        markerList.add(marker);
+//        if(db.nodes.size()>1)
+//        {
+//            db.nodes.remove(0);
+//        }
+//
+//        for(String val : db.nodes)
+//        {
+//            Log.d("Directions String", val);
+//            AnimalNode node = db.animalNodes.get(val);
+//            if(node.lat!= null)
+//            {
+//
+//                LatLng latLng = new LatLng(node.lat,node.lng);
+//                markerOptions = new MarkerOptions().position(latLng).title(node.name);
+//                //Create Marker
+//                marker = gMap.addMarker(markerOptions);
+//                //Add Latlng and Marker
+//                latLngList.add(latLng);
+//                markerList.add(marker);
+//                if(polyline != null) polyline.remove();
+//                //Create PolylineOptions
+//                PolylineOptions polylineOptions = new PolylineOptions()
+//                        .addAll(latLngList).clickable(true);
+//                polyline = gMap.addPolyline(polylineOptions);
+//
+//                polyline.setColor(Color.rgb(red,green,blue));
+//            }
+//            Log.d("Markers",latLngList.toString());
+//            Log.d("LatLngList",latLngList.toString());
+//
+//
+//
+//        }
+//
+//    }
     //Draws all locations on the map
     public void generateMarkers()
     {
