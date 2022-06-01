@@ -88,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void OnMapClicked(View view)
-    {
-        Intent intent = new Intent(this,MapActivity.class);
-        startActivity(intent);
-    }
+//    public void OnMapClicked(View view)
+//    {
+//        Intent intent = new Intent(this,MapActivity.class);
+//        startActivity(intent);
+//    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Saved Selected Exhibits List to Shared preferences. ", Toast.LENGTH_SHORT).show();
     }
 
-    public void OnRoutePlanClicked(View view) {
-        Intent intent = new Intent(this, MapActivity.class);
-        startActivity(intent);
-    }
+//    public void OnRoutePlanClicked(View view) {
+//        Intent intent = new Intent(this, MapActivity.class);
+//        startActivity(intent);
+//    }
 }

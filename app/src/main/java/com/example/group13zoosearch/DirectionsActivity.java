@@ -24,12 +24,13 @@ public class DirectionsActivity extends AppCompatActivity {
     private Graph<String, IdentifiedWeightedEdge> ZooGraphConstruct;
     private List<String> directions;
     private String currentLocation;
+    private String previousLocation;
     private String currentLocationName;
     private TextView animalToVisit;
     TextView noAnimalsSelected;
     TextView headingToText;
     TextView currentAnimalText;
-    private boolean detailed;
+    private boolean detailed=false;
     private boolean noSelectedAnimals;
     ListAdapter listAdapter;
 
@@ -38,6 +39,10 @@ public class DirectionsActivity extends AppCompatActivity {
     private ArrayList<AnimalNode> animalRoute;
     private Stack<AnimalNode> visitedAnimals;
     private int currIndex;
+
+    //Used in detailDirection
+    private AnimalNode currentAnimal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class DirectionsActivity extends AppCompatActivity {
         //Fetching selected animals and creating route plan
         AnimalList anList = new AnimalList(this, "exhibit_info.json","trail_info.json","zoo_graph.json");
         currentLocation = "entrance_exit_gate";
+        previousLocation = currentLocation;
         animalRoute = anList.generateArrayList(currentLocation);
         animalRoute = Directions.computeRoute(currentLocation,animalRoute, ZooGraphConstruct);
         Log.d("Animal Route created:", animalRoute.toString());
@@ -88,13 +94,20 @@ public class DirectionsActivity extends AppCompatActivity {
                 currIndex++;
             }
             AnimalNode currAnimal = animalRoute.get(currIndex);
+            currentAnimal = currAnimal;
             animalRoute.get(currIndex).visited = true;
             visitedAnimals.push(currAnimal);
 
             //setting Animal name text view
             currentAnimalText.setText(currAnimal.name);
 
-            directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            //directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            if(detailed==true){
+                directions = Directions.getDirectionsList(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
+            else{
+                directions = Directions.getDirectionsListBrief(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
 
             //TODO change this to just get the user's current GPS location
             if(currAnimal.group_id == null) {
@@ -115,6 +128,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void nextDirections(View view) {
+        previousLocation = currentLocation;
         if (noSelectedAnimals) return;
         directions.clear();
         if(currIndex < 0){currIndex = 0;}else {
@@ -146,12 +160,19 @@ public class DirectionsActivity extends AppCompatActivity {
                 visitedAnimals.push(animalRoute.get(currIndex - 1));
             }
             AnimalNode currAnimal = animalRoute.get(currIndex);
+            currentAnimal = currAnimal;
             animalRoute.get(currIndex).visited = true;
 
             //setting Animal name text view
             currentAnimalText.setText(currAnimal.name);
 
-            directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            //directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            if(detailed==true){
+                directions = Directions.getDirectionsList(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
+            else{
+                directions = Directions.getDirectionsListBrief(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
 
             //TODO change this to just get the user's current GPS location
             if(currAnimal.group_id == null) {
@@ -176,6 +197,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void previousDirections(View view) {
+        previousLocation = currentLocation;
         if (noSelectedAnimals) return;
 
         directions.clear();
@@ -204,9 +226,16 @@ public class DirectionsActivity extends AppCompatActivity {
             } else {animalRoute.get(currIndex).visited = false;}
             currIndex--;
             AnimalNode currAnimal = visitedAnimals.pop();
+            currentAnimal = currAnimal;
             currentAnimalText.setText(currAnimal.name);
 
-            directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            //directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            if(detailed==true){
+                directions = Directions.getDirectionsList(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
+            else{
+                directions = Directions.getDirectionsListBrief(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
 
             //TODO change this to just get the user's current GPS location
             if(currAnimal.group_id == null) {
@@ -226,6 +255,7 @@ public class DirectionsActivity extends AppCompatActivity {
     }
 
     public void skipDirections(View view) {
+        previousLocation = currentLocation;
        //Basically the same as next btn except does not add animal to previous animals list
         if (noSelectedAnimals) return;
 
@@ -254,12 +284,19 @@ public class DirectionsActivity extends AppCompatActivity {
                 currIndex++;
             }
             AnimalNode currAnimal = animalRoute.get(currIndex);
+            currentAnimal = currAnimal;
             animalRoute.get(currIndex).visited = true;
 
             //setting Animal name text view
             currentAnimalText.setText(currAnimal.name);
 
-            directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            //directions = Directions.getDirectionsList(currentLocation, currAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            if(detailed==true){
+                directions = Directions.getDirectionsList(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
+            else{
+                directions = Directions.getDirectionsListBrief(currentLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+            }
 
             //TODO change this to just get the user's current GPS location
             if(currAnimal.group_id == null) {
@@ -294,6 +331,14 @@ public class DirectionsActivity extends AppCompatActivity {
         if(detailed){ detailed = false; } else {detailed = true;}
         Log.d("Detailed Directions:", String.valueOf(detailed));
         //TODO some call to refresh directions
+        directions.clear();
+        if(detailed==true){
+            directions = Directions.getDirectionsList(previousLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+        }
+        else{
+            directions = Directions.getDirectionsListBrief(previousLocation, currentAnimal, ZooGraphConstruct, edgeNodes,animalNodes);
+        }
+        listAdapter.setDirectionItems(directions);
         Log.d("Button: ","Toggle");
     }
 
@@ -303,10 +348,10 @@ public class DirectionsActivity extends AppCompatActivity {
         finish();
     }
 
-    public void returnToRoutePlan(View view) {
-        //AnimalList.updateSelected_animal_nodes(selectedAnimals);
-        Intent intent = new Intent(this, MapActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//    public void returnToRoutePlan(View view) {
+//        //AnimalList.updateSelected_animal_nodes(selectedAnimals);
+//        Intent intent = new Intent(this, MapActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
 }
