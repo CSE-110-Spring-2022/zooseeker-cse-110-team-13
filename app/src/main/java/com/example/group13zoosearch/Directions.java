@@ -76,7 +76,7 @@ public class Directions {
             DirectionStepItem temp = null;
             for (IdentifiedWeightedEdge e : pathFound.getEdgeList()) {
                 temp = new DirectionStepItem(zooGraph.getEdgeWeight(e), Objects.requireNonNull(edgeNodes.get(e.getId())).street,
-                        Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name);
+                        Integer.toString(i), Objects.requireNonNull(animalNodes.get(nodes.get(i))).name, null);
                 directions.add(temp.toString());    //not the most elegant way to do this but it works ;-;
                 Log.d("directions", temp.toString());
                 i++;
